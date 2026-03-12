@@ -1,0 +1,9 @@
+#+title: Notes
+Ellipser-funktioner m. vektorfunktioner og vægtsystem
+Tyngdekraftbaseret system
+* Tyngdekraftbaseret system
+Plastik fødes med inerti (skal testes), og skal sidenhen hives af usynlige vægte
+* Opskalering
++ 480x270 pixel -> Opskaleres til 1920x1080 (pixel perfect) aspect_ratio 16:9 kig på brugere https://store.steampowered.com/hwsurvey
+* Logic grid
+$9:16$ el. $1:1,\bar{7}$

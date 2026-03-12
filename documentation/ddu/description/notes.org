@@ -1,0 +1,28 @@
+#+title: Notes
+* Relevante datoer
+* Krav til projektbeskrivelse
+* Udkast til projekt
+1. Et top-down spil, hvor på en båd samler plastik, hvor strømme langsomt gør, at plastikken ophober sig, hvorefter de bliver til monstre. Senerehen kan der kommer skibe, der smider affald
+   + billedformat: 16:9
+   + Evt. controller
+   + Skubbe rundt
+   + Plastik ophober sig og bliver til monstre; man dræber og så skal man skynde sig at samle plastikken op igen
+   + Generere vektorfelte? Til at simulere strøm, der påvirker plastik, så det ophober sig, men også spillerens avatar (en båd)
+   + Levels og shop og plastik som currency
+2. Et semi top-down spil, hvor man sejler op ad en flod
+   + billedformat: 5:4
+* Forslag til tests
++ Sammenlign billedformat
++ Valg af dynamics (tastatur vs controller)
++ Stilart (realism vs pixel-art)
+  + Styring båd (fuld-stop før skydning versus at skyde og sejle hele tiden)
++ Test af hvor flydende mechanicsne er
+* Krav til beskrivelse
+** [X] Kopi af det valte projektoplæg
+** [X] Problemformulering
+** [ ] Problemanalyse (kort udkast)
+** [ ] Overvejelser om projektets indhold (fx software, hardware og tværfaglighed)
+** [ ] Tidsplan (kort udkast)
+
+* Mipmap (2D)-optimisering
+* Optimisering

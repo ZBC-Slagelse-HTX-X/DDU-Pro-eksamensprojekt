@@ -1,0 +1,47 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{parskip}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[danish]{babel}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{todonotes}
+\usepackage[danish=guillemets]{csquotes}
+
+\title{
+  Projektbeskrivelse\\
+  {\large eksamensprojekt programmering b}
+}
+
+\author{Jeppe Bøgeskov og Alexander Schade}
+
+\begin{document}
+
+\maketitle
+\section*{Valg af programmeringssprog}
+Til projektet anvendes Rust.
+
+\section*{Link til repo}
+\url{https://github.com/ZBC-Slagelse-HTX-X/DDU-Pro-eksamensprojekt}
+
+\section*{Problemformulering}
+\paragraph{Obs.} Produktet, som programmeringsprojektet afføder, skal agere et subkomponent (\textbf{hvor selve programmeringsrelevante aspekter og overvejelser, så er segregeret fra den DDU-relevante aflevering}) i et større spil, der behandles i faget DDU (Teknikfag A).
+
+Her indgår både et shopping-system til progression og spilverden består primært af et åbent hav, hvor forskellige fjender interagere med hinanden og spilleren (altså spillets entiteter).
+\begin{displayquote}
+  \begin{enumerate}
+    \item Hvordan kan man lave et system, der approksimerer, hvordan havstrømme påvirker andre entiteter på en optimal måde---her forstås, at beregninger er forholdsvis billige.
+    \item Desuden undersøges det, hvordan man kan dataficere varer og kode logikken til et butikssystem.
+    \item Afrundingsvis hvordan opstilles en pæn og klar grænseflade mellem brugger grænsefladen og data-logikken?
+\end{enumerate}
+\end{displayquote}
+
+\section*{Ansvarsfordeling}
+Det forventes, at Alexander Schade har ansvaret for forståelse af spilmotoren og integrering. Jeppe Bøgeskov holder styr på den overordnet udvikling af systemet.
+
+\end{document}
