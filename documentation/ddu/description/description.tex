@@ -7,10 +7,21 @@
 \usepackage{lmodern}
 \usepackage{booktabs}
 \usepackage{float}
+\usepackage{graphicx}
 \usepackage{pdfpages}
 \usepackage[T1]{fontenc}
+\usepackage{hyperref}
 \usepackage{todonotes}
 \usepackage[danish=guillemets]{csquotes}
+\usepackage[
+    backend=biber,
+    style=authoryear-icomp,
+    natbib=true,
+    url=false,
+    doi=true,
+    eprint=false
+]{biblatex}
+\addbibresource{bibliografi.bib}
 
 \title{
   Projektbeskrivelse\\
@@ -29,16 +40,33 @@
 \section*{Problemformulering}
 Udkastet til problemformuleringen, der findes interessant er:
 \begin{displayquote}
-Hvordan kan man lave et spil, hvor havstrømme simuleres og samtidig gøre det interessant for en spiller at navigere i, som har til formål at bringe et moralsk budskab om forurening og \textit{vise} det til spilleren, ikke \textit{fortælle} det, men heller ikke forcere det frem?
+Hvordan kan man lave et spil med havstrømme, der er interessant at navigere i, som har til formål at bringe et moralsk budskab om forurening og \textit{vise} det til spilleren, ikke \textit{fortælle} det, men heller ikke forcere det frem?
 \end{displayquote}
+
+\textbf{Tekniske problemer}
+\begin{enumerate}
+  \item Hvordan kan vi gøre, at båd-movement ikke er til gene for gameplay og forekommer naturligt?
+  \item Hvordan kan vi lave interessant gameplay, der får spilleren i flow, når der er tale om et top-down-spil med et fixed-camera?
+  \item Hvordan kan vi lave en overordnet progression, der giver spilleren lyst til at fortsætte og dygtiggøre sig? 
+\end{enumerate}
 \newpage
 
 \section*{Udkast til problemanalyse}
-\todo[inline]{Skriv udkast til problemanalyse}
+\subsection{Havstrømme}
+Havstrømme opstår som følge af klimaforhold, herunder temperatur-, vind-, og saltforhold, se \footfullcite{HavstrommeIlluVid}. Som det fremgår af \autoref{fig:havstromme}, eksisterer havstrømme på en meget stor skala, så de på en menneskelig skala vil fremstå som strømmende fra en retning til den modsatte. For at få en forståelse af strømmene, bliver de således nødt til at være mere tegneserieagtige.
+
+\subsection{Opløsninger}
+Det fremgår af Steam\footnote{Steam er en af de mest populære game launchers og udgiver månedligt en oversigt over deres brugeres maskinelle setups, hvilket er utrolig brugbart for en spiludvikler, så man kan målrette sit spil} Hardware og Software Surveys, at den mest anvendte skærmopløsning er 1920x1080 pixels, som $45,04\%$ anvender, og den næstmest anvendte skærmopløsning er 2560x1440 pixels, som $38,64\%$, altså udgør de to skærmopløsninger $83,68\%$ tilsammen.
+\begin{figure}[H]
+  \includegraphics[width=0.85\textwidth]{assets/havstromme.png}
+  \caption{Viser, hvordan havstrømmene ser ud.}\label{fig:havstromme}
+\end{figure}
 \newpage
 
 \section*{Overvejelser om projektets indhold}
-\todo[inline]{Elaborer.}
+Projektet skal være top-down med en player avatar bestående af en båd-sprite. Desuden skal der være affaldsstykker, der påvirkes af havstrøm og ophober sig, hvorefter de bliver til fjender. Spillerens avatar skal også påvirkes af havstrømmene og må således korrigere for at bevare sin position. Spilleren bekæmper monstrene og indsamler plastikstykkerne som valuta, og kan således komme videre. I intermissioner kan spilleren købe items og opgraderes.
+
+Vi kan tilføje opgraderinger og forskellige fjender og krav til, hvordan de opstår, når vi har lavet den primære spil sløjfe. Ligedan kan vi kigge på en fortælling, når vi har gjort det, mens world-building er en prioritet, og budskabet skal formidles uafhængigt af fortællingen.
 \newpage
 
 \section*{Tidsplan}
@@ -63,7 +91,7 @@ Hvordan kan man lave et spil, hvor havstrømme simuleres og samtidig gøre det i
     13 & mandag d. 23. marts 2026 \\
     14 & mandag d. 30. marts 2026 \\
     15 & mandag d. 6. april 2026 \\
-    16 & mandag d. 13. april 2026 \\
+    16 & mandag d. 13. april 2026  (\textit{\textbf{Obs. projektuge}}) \\
     17 & mandag d. 20. april 2026 \\
     18 & mandag d. 27. april 2026 \\
     19 & mandag d. 4. maj 2026 \\
@@ -71,4 +99,6 @@ Hvordan kan man lave et spil, hvor havstrømme simuleres og samtidig gøre det i
     \bottomrule
   \end{tabular}\caption{Viser de pågældende uger, hvor projektet er verserende.}
 \end{table}
+
+Tidsplanen er styret via GitHubs project-managamenet med udgangspunkt i SCRUM-metoden. Her ses det som et roadmap: \url{https://github.com/orgs/ZBC-Slagelse-HTX-X/projects/6/views/4}
 \end{document}

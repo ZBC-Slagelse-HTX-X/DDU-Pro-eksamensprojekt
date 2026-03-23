@@ -2160,6 +2160,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "current_simulation"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+]
+
+[[package]]
 name = "cursor-icon"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3820,6 +3827,7 @@ name = "plastic_game"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "current_simulation",
 ]
 
 [[package]]

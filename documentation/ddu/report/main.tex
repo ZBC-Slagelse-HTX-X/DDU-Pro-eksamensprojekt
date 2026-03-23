@@ -1,5 +1,103 @@
 \documentclass[a4paper, 12pt]{article}
-
+\usepackage{lmodern} 
+\usepackage{parskip}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[danish]{babel}
+\usepackage{todonotes}
+\usepackage{pdfpages}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{pdflscape}
+\usepackage{csquotes}
+\usepackage[
+    backend=biber,
+    style=authoryear-icomp,
+    natbib=true,
+    url=false,
+    doi=true,
+    eprint=false
+]{biblatex}
+\addbibresource{bibliografi.bib}
 \begin{document}
-\input{forside.tex}
+\pagenumbering{gobble}
+\input{kapitler/forside.tex}
+\pagenumbering{Roman} \restoregeometry
+\newpage
+\pagenumbering{arabic}
+
+\todo[inline]{Kapitel: Forord}
+
+\tableofcontents
+
+\todo[inline]{Kapitel: Indledning}
+
+\todo[inline]{Kapitel: Problembeskrivelse}
+
+\todo[inline]{Kapitel: Resume}
+
+\todo[inline]{Kapitel: Produktprincip}
+\newpage
+
+\section{Projektoplæg}
+\begin{minipage}{\textwidth}
+  \includepdf[pages=-, frame=true, scale=0.75]{assets/valgte_oplaeg.pdf}
+\end{minipage}
+\newpage
+
+\todo[inline]{Kapitel: Problemanalyse}
+
+\section{Software og materialelister}
+\input{kapitler/softwaremateriale.tex}
+\newpage
+
+\section{Projektafgrænsning}
+\input{kapitler/projektafgrænsning.tex}
+\newpage
+
+\section{Planlægning}
+\input{kapitler/planlægning.tex}
+\newpage
+
+\section{Metoder og redskaber}
+\input{kapitler/metode_redskab.tex}
+\newpage
+
+\todo[inline]{Kapitel: Produktudvikling}
+\newpage
+
+\todo[inline]{Kapitel: Produktevaluering}
+\newpage
+
+\todo[inline]{Kapitel: Løsningsforslag}
+\newpage
+
+\todo[inline]{Kapitel: Markedsføring}
+\newpage
+
+\todo[inline]{Kapitel: Konklusion}
+\newpage
+
+\todo[inline]{Kapitel: Perspektivering}
+\newpage
+
+\printbibliography[heading=bibintoc, title={Bibliografi}]
+
+\section{Bilag}
+\subsection{Appendiks A}
+\input{appendices/brainstorm/appendiks.tex}
+\newpage
+
+\subsection{Appendiks B}
+\input{appendices/projektbeskrivelse/appendiks.tex}
+\newpage
+
+\subsection{Appendiks C}
+\input{appendices/skaleringtegninger/appendiks.tex}
+\newpage
+
+\subsection{Appendiks D}
+\input{appendices/standups/appendiks.tex}
+\newpage
+
 \end{document}

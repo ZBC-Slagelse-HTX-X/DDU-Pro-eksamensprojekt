@@ -1,0 +1,9 @@
+/home/alex/Desktop/DDU-pro-eksamensprojekt/current_simulation/target/debug/deps/bevy_input_focus-c2c258680e42a163.d: /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/lib.rs /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/directional_navigation.rs /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/navigator.rs /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/tab_navigation.rs /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/autofocus.rs
+
+/home/alex/Desktop/DDU-pro-eksamensprojekt/current_simulation/target/debug/deps/libbevy_input_focus-c2c258680e42a163.rmeta: /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/lib.rs /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/directional_navigation.rs /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/navigator.rs /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/tab_navigation.rs /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/autofocus.rs
+
+/home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/lib.rs:
+/home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/directional_navigation.rs:
+/home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/navigator.rs:
+/home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/tab_navigation.rs:
+/home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_input_focus-0.18.1/src/autofocus.rs:
