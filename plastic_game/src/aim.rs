@@ -27,12 +27,18 @@ pub fn change_aim_acceleration(
             }
         },
         crate::movement::InputMode::Controller => {
-            // Uses left stick for movement
+            // Uses right stick for aim
             if let Some(gamepad) = gamepad {
+                const THRESHOLD: f32 = 0.025;
+                const SENSITIVITY: f32 = 0.5;
                 let current_stick_x = gamepad.get(GamepadAxis::RightStickX).unwrap();
                 let current_stick_y = gamepad.get(GamepadAxis::RightStickY).unwrap();
-                weighed_direction.x += current_stick_x;
-                weighed_direction.y += current_stick_y;
+                if current_stick_x.abs() > THRESHOLD {
+                    weighed_direction.x += current_stick_x * SENSITIVITY;
+                }
+                if current_stick_y.abs() > THRESHOLD {
+                    weighed_direction.y += current_stick_y * SENSITIVITY;
+                }
             } 
         }
     }
@@ -44,12 +50,12 @@ pub fn change_aim_velocity (
     current_acceleration: Single<&crate::movement::Acceleration, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
     time: Res<Time>
 )  {
-    const THERMAL_SPEED: f32 = 75.;
-    const FRICTION: f32 = 150.;
+    const THERMAL_SPEED: f32 = 150.;
+    const FRICTION: f32 = 300.;
     let mut change_in_velocity: Vec2 = Vec2::ZERO;
     change_in_velocity = current_acceleration.0 * time.delta_secs();
     current_velocity.0 += change_in_velocity;
-    current_velocity.0.clamp_length_max(THERMAL_SPEED);
+    current_velocity.0 = current_velocity.0.clamp_length_max(THERMAL_SPEED);
     if current_velocity.0.length() > 0. {
         if FRICTION * time.delta_secs() > current_velocity.0.length() {
             current_velocity.0 = Vec2::ZERO;
@@ -62,7 +68,7 @@ pub fn change_aim_velocity (
 }
 
 pub fn update_aim_position (
-    mut query: Single<(&mut Transform, &crate::movement::Velocity), (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
+    query: Single<(&mut Transform, &crate::movement::Velocity), (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
     time: Res<Time>
 ) {
     let (mut aim_position, velocity) = query.into_inner();

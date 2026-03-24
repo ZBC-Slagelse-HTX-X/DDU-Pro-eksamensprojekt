@@ -63,10 +63,16 @@ pub fn change_player_acceleration (
         crate::movement::InputMode::Controller => {
             // Uses left stick for movement
             if let Some(gamepad) = gamepad {
+                const THRESHOLD: f32 = 0.025;
+                const SENSITIVITY: f32 = 0.5;
                 let current_stick_x = gamepad.get(GamepadAxis::LeftStickX).unwrap();
                 let current_stick_y = gamepad.get(GamepadAxis::LeftStickY).unwrap();
-                weighed_direction.x += current_stick_x;
-                weighed_direction.y += current_stick_y;
+                if current_stick_x.abs() > THRESHOLD {
+                    weighed_direction.x += current_stick_x * SENSITIVITY;
+                }
+                if current_stick_y.abs() > THRESHOLD {
+                    weighed_direction.y += current_stick_y * SENSITIVITY;
+                }
             } 
         }
     }
@@ -78,14 +84,17 @@ pub fn change_player_velocity (
     current_acceleration: Single<&crate::movement::Acceleration, (With<PlayerAvatar>, Without<crate::aim::PlayerAim>)>,
     time: Res<Time>
 )  {
-    const THERMAL_SPEED: f32 = 75.;
+    const THERMAL_SPEED: f32 = 125.;
     let mut change_in_velocity: Vec2 = Vec2::ZERO;
     change_in_velocity = current_acceleration.0 * time.delta_secs();
     current_velocity.0 += change_in_velocity;
-    current_velocity.0.clamp_length_max(THERMAL_SPEED);
+    current_velocity.0 = current_velocity.0.clamp_length_max(THERMAL_SPEED);
 }
 
-pub fn update_player_position(mut  player_query: Single<(&mut Transform, &crate::movement::Velocity), (With<PlayerAvatar>, Without<crate::aim::PlayerAim>)>, time: Res<Time>) {
+pub fn update_player_position(
+    player_query: Single<(&mut Transform, &crate::movement::Velocity), (With<PlayerAvatar>, Without<crate::aim::PlayerAim>)>,
+    time: Res<Time>
+) {
     let (mut position, velocity) = player_query.into_inner();
     let change_in_position = velocity.0 * time.delta_secs();
     position.translation += change_in_position.extend(0.0);
