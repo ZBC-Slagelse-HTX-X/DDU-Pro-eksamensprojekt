@@ -1,0 +1,12 @@
+#+title: Notes
+* Assertions
+* Error-handling - Result og #[must-use]
+* Integration-test
+* Library crate
+* Map-klasse
+* Optimisering (langtidsbevaring)
+* Diskret system
+* Evt. fingerprinting?
+* Evt. doc-test
+* Versioning (branching)
+
