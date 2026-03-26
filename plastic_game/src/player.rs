@@ -34,7 +34,10 @@ pub fn spawn_player(
             )]
         ));
 }
-
+pub fn player_movement_plugin(app: &mut App) {
+    app
+        .add_systems(Update, (change_player_acceleration, change_player_velocity, update_player_position));
+}
 
 pub fn change_player_acceleration (
     mut current_acceleration: Single<&mut crate::movement::Acceleration, (With<PlayerAvatar>, Without<crate::aim::PlayerAim>)>,

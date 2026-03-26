@@ -3,6 +3,11 @@ use bevy::prelude::*;
 #[derive(Component)]
 pub struct PlayerAim;
 
+pub fn aim_plugin(app: &mut App) {
+    app
+        .add_systems(Update, (change_aim_acceleration, change_aim_velocity, update_aim_position));
+}
+
 pub fn change_aim_acceleration(
     mut current_acceleration: Single<&mut crate::movement::Acceleration, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
     keyboard_input: Res<ButtonInput<KeyCode>>,

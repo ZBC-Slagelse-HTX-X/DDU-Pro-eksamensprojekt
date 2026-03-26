@@ -20,7 +20,7 @@ impl Default for Acceleration {
 
 #[derive(Resource, Default, PartialEq, Eq)]
 pub enum InputMode {
-    Keyboard,
     #[default]
+    Keyboard,
     Controller,
 }
