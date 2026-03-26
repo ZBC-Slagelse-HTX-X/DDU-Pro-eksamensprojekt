@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use super::GameState;
 
 fn splash_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
-    let icon = asset_server.load("branding/bevy_logo_dark.svg");
+    let icon = asset_server.load("branding/bevy_logo_dark.png");
     commands.spawn((
         // This entity will be despawned when exiting the state
         DespawnOnExit(GameState::Splash),
@@ -18,12 +18,12 @@ fn splash_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             ImageNode::new(icon),
             Node {
                 // This will set the logo to be 200px wide, and auto adjust its height
-                width: px(200),
+                width: px(400),
                 ..default()
             },
         )],
     ));
-    commands.insert_resource(SplashTimer(Timer::from_seconds(1.0, TimerMode::Once)));
+    commands.insert_resource(SplashTimer(Timer::from_seconds(3.0, TimerMode::Once)));
 }
 
 fn countdown(
@@ -32,7 +32,7 @@ fn countdown(
     mut timer: ResMut<SplashTimer>,
 ) {
     if timer.tick(time.delta()).is_finished() {
-        game_state.set(GameState::Menu);
+        game_state.set(GameState::Game);
     }
 }
 
