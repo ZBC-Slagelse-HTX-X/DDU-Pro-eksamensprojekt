@@ -93,22 +93,32 @@
 \printbibliography[heading=bibintoc, title={Bibliografi}]
 
 \section{Bilag}
-\vfill
+\appendix
+
 \subsection{Appendiks A ``brainstorm''}
+\renewcommand{\thepage}{A\arabic{page}}
+\pagenumbering{arabic}
 \input{appendices/brainstorm/appendiks.tex}
 \newpage
 
 \null\vfill
 \subsection{Appendiks B ``afleverede projektbeskrivelse''}
+\renewcommand{\thepage}{B\arabic{page}}
+\pagenumbering{arabic}
 \input{appendices/projektbeskrivelse/appendiks.tex}
 \newpage
 
 \null\vfill
 \subsection{Appendiks C ``opløsningovervejelser''}
+\renewcommand{\thepage}{C\arabic{page}}
+\pagenumbering{arabic}
 \input{appendices/skaleringtegninger/appendiks.tex}
 \newpage
 
+\null\vfill
 \subsection{Appendiks D ``stand-up-referater''}
+\renewcommand{\thepage}{D\arabic{page}}
+\pagenumbering{arabic}
 \input{appendices/standups/appendiks.tex}
 \newpage
 \end{document}

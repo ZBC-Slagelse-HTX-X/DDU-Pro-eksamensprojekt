@@ -2,13 +2,18 @@ use bevy::prelude::*;
 
 #[derive(Component)]
 pub struct PlayerAim;
-
-pub fn aim_plugin(app: &mut App) {
+pub fn aim_plugin (app: &mut App) {
     app
-        .add_systems(Update, (change_aim_acceleration, change_aim_velocity, update_aim_position));
+        .add_systems(Update, (
+            change_aim_acceleration,
+            change_aim_velocity,
+            update_aim_position,
+            minimum_aim_distance,
+            shooting
+        ));
 }
 
-pub fn change_aim_acceleration(
+pub fn change_aim_acceleration (
     mut current_acceleration: Single<&mut crate::movement::Acceleration, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
     mode: Res<crate::movement::InputMode>,
@@ -19,16 +24,16 @@ pub fn change_aim_acceleration(
     match *mode {
         crate::movement::InputMode::Keyboard => {
             if keyboard_input.pressed(KeyCode::ArrowUp) {
-                weighed_direction.y += 0.1;
+                weighed_direction.y += 0.3;
             }
             if keyboard_input.pressed(KeyCode::ArrowLeft) {
-                weighed_direction.x -= 0.1;
+                weighed_direction.x -= 0.3;
             }
             if keyboard_input.pressed(KeyCode::ArrowDown) {
-                weighed_direction.y -= 0.1;
+                weighed_direction.y -= 0.3;
             }
             if keyboard_input.pressed(KeyCode::ArrowRight) {
-                weighed_direction.x += 0.1;
+                weighed_direction.x += 0.3;
             }
         },
         crate::movement::InputMode::Controller => {
@@ -57,8 +62,7 @@ pub fn change_aim_velocity (
 )  {
     const THERMAL_SPEED: f32 = 150.;
     const FRICTION: f32 = 300.;
-    let mut change_in_velocity: Vec2 = Vec2::ZERO;
-    change_in_velocity = current_acceleration.0 * time.delta_secs();
+    let change_in_velocity = current_acceleration.0 * time.delta_secs();
     current_velocity.0 += change_in_velocity;
     current_velocity.0 = current_velocity.0.clamp_length_max(THERMAL_SPEED);
     if current_velocity.0.length() > 0. {
@@ -72,6 +76,20 @@ pub fn change_aim_velocity (
     }
 }
 
+pub fn minimum_aim_distance (
+    mut current_shooting_pos: Single<&mut Transform, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
+    mut current_velocity: Single<&mut crate::movement::Velocity, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
+) {
+    const MINIMUM_DISTANCE: f32 = 20.;
+    let flat_pos = current_shooting_pos.translation.truncate();
+    let normalized = flat_pos.normalize_or_zero();
+    if normalized != Vec2::ZERO && flat_pos.length() < MINIMUM_DISTANCE {
+        let z_value: f32 = current_shooting_pos.translation.z;
+        current_shooting_pos.translation = (normalized * -MINIMUM_DISTANCE * 1.25).extend(z_value);
+        current_velocity.0 = Vec2::ZERO;
+    }
+}
+
 pub fn update_aim_position (
     query: Single<(&mut Transform, &crate::movement::Velocity), (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
     time: Res<Time>
@@ -79,4 +97,32 @@ pub fn update_aim_position (
     let (mut aim_position, velocity) = query.into_inner();
     let change_in_position = velocity.0 * time.delta_secs();
     aim_position.translation += change_in_position.extend(0.0);
+}
+
+fn shooting (
+    keyboard_input: Res<ButtonInput<KeyCode>>,
+    mode: Res<crate::movement::InputMode>,
+    gamepad: Option<Single<&Gamepad>>,
+    current_shooting_pos: Single<&Transform, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
+    current_player_pos: Single<&Transform, (With<crate::player::PlayerAvatar>, Without<PlayerAim>)>
+) {
+    match *mode {
+        crate::movement::InputMode::Keyboard => {
+            if keyboard_input.just_pressed(KeyCode::Space) {
+                eprintln!("Shot at: {}", current_shooting_pos.translation);
+                eprintln!("Shot from: {}", current_player_pos.translation);
+            }
+        },
+        crate::movement::InputMode::Controller => {
+            if let Some(gamepad) = gamepad {
+                const THRESHOLD: f32 = 0.5;
+                let trigger_button = gamepad.get(GamepadButton::RightTrigger2).unwrap();
+                if trigger_button > THRESHOLD {
+                    eprintln!("Shot at: {}", current_shooting_pos.translation);
+                    eprintln!("Shot from: {}", current_player_pos.translation);
+                }
+            };
+        }
+
+    }
 }

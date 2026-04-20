@@ -22,5 +22,24 @@ impl Default for Acceleration {
 pub enum InputMode {
     #[default]
     Keyboard,
-    Controller,
+    Controller
+}
+
+pub fn change_inputmode(
+    keyboard_input: Res<ButtonInput<KeyCode>>,
+    mut mode: ResMut<crate::movement::InputMode>,
+    gamepad: Option<Single<&Gamepad>>,
+) {
+    match *mode {
+        crate::movement::InputMode::Keyboard => {
+            if let Some(gamepad) = gamepad {
+                *mode = crate::movement::InputMode::Controller;
+            } 
+        },
+        crate::movement::InputMode::Controller => {
+            if gamepad.is_none() {
+                *mode = crate::movement::InputMode::Keyboard;
+            } 
+        }
+    }
 }

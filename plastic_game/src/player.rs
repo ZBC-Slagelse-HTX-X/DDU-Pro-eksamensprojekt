@@ -4,39 +4,39 @@ use bevy::prelude::*;
 pub struct PlayerAvatar;
 
 pub fn spawn_player(
-    mut commands: Commands,
+    mut commands: Commands, asset_server: Res<AssetServer>,
     mut materials: ResMut<Assets<ColorMaterial>>,
-    mut meshes: ResMut<Assets<Mesh>>,
+    mut meshes: ResMut<Assets<Mesh>>
 ) {
-    const PLAYER_OUTER_RING: f32 = 5.;
-    const PLAYER_INNER_RING: f32 = 2.5;
-    const PLAYER_COLOR: Color = Color::hsl(360.0, 0.95, 0.7);
-    let player_ring = meshes.add(Ring::new(Circle::new(PLAYER_OUTER_RING), Circle::new(PLAYER_INNER_RING)));
     const AIM_OUTER_RING: f32 = 2.5;
     const AIM_INNER_RING: f32 = 1.25;
     const AIM_COLOR: Color = Color::hsl(240.0, 0.95, 0.5);
-    let aim_ring = meshes.add(Ring::new(Circle::new(AIM_OUTER_RING), Circle::new(AIM_INNER_RING))); 
-    commands
-        .spawn((
-            PlayerAvatar,
-            Mesh2d(player_ring),
-            MeshMaterial2d(materials.add(PLAYER_COLOR)),
-            Transform::from_xyz(0., 0., 0.),
+    let aim_ring = meshes.add(Ring::new(Circle::new(AIM_OUTER_RING), Circle::new(AIM_INNER_RING)));
+    // The sample sprite that will be rendered to the pixel-perfect canvas
+    commands.spawn((
+        PlayerAvatar,
+        Sprite::from_image(asset_server.load("sprites/boat/syd_øst.png")),
+        Transform::from_xyz(0., 0., 1.),
+        crate::movement::Velocity::default(),
+        crate::movement::Acceleration::default(),
+        crate::pixel_grid::PIXEL_PERFECT_LAYERS,
+        children![(
+            crate::aim::PlayerAim,
+            Mesh2d(aim_ring),
+            MeshMaterial2d(materials.add(AIM_COLOR)),
+            Transform::from_xyz(-30., 0., 3.),
             crate::movement::Velocity::default(),
-            crate::movement::Acceleration::default(),
-            children![(
-                crate::aim::PlayerAim,
-                Mesh2d(aim_ring),
-                MeshMaterial2d(materials.add(AIM_COLOR)),
-                Transform::from_xyz(0., 0., 0.),
-                crate::movement::Velocity::default(),
-                crate::movement::Acceleration::default()
-            )]
-        ));
+            crate::movement::Acceleration::default()
+        ),
+        (
+            Sprite::from_image(asset_server.load("sprites/player/syd_øst.png")),
+            Transform::from_xyz(0., 0., 2.)
+        )]
+    ));
 }
 pub fn player_movement_plugin(app: &mut App) {
     app
-        .add_systems(Update, (change_player_acceleration, change_player_velocity, update_player_position));
+        .add_systems(Update, (change_player_acceleration, change_player_velocity, update_player_position).run_if(in_state(crate::GameState::Game)));
 }
 
 pub fn change_player_acceleration (

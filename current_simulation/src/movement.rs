@@ -4,7 +4,18 @@ pub struct Position(pub Vec2);
 
 pub struct Acceleration(pub Vec2);
 
+#[derive(Copy, Clone)]
 pub struct Velocity(pub Vec2);
+
+pub struct VelocityPosition {
+    position: Position,
+    velocity: Velocity
+}
+impl VelocityPosition {
+    pub fn from_vel_and_pos(velocity: Velocity, position: Position) -> Self {
+        Self { position, velocity}
+    }
+}
 
 fn velocity_from_acceleration(acceleration: Acceleration, delta: f32) -> Velocity {
     let velocity_vector: Vec2 = acceleration.0 * delta;
