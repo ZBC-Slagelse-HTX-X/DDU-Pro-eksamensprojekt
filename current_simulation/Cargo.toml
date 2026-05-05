@@ -5,6 +5,10 @@ edition = "2024"
 
 [dependencies]
 bevy = { version = "0.18.1", features = ["wayland"] }
+plotters = { version = "0.3.7", optional = true }
 
 [lib]
 name = "current_simulator"
+
+[features]
+previewing = ["dep:plotters"]

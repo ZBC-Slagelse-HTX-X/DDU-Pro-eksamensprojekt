@@ -11,7 +11,8 @@ pub struct Map {
     pub wrap_around: bool,
     pub initial_velocity: movement::Velocity,
     pub simulation_density: u16,
-    pub step: f32
+    pub step_size: f32,
+    pub iterations: u32
 }
 
 struct Particle {
@@ -26,9 +27,10 @@ struct GhostParticle {
 
 impl Default for Map {
     fn default() -> Self {
-        Self {width: 0., height: 0., wrap_around: false, initial_velocity: movement::Velocity(Vec2::new(0., 0.)), simulation_density: 10, step: 1.}
+        Self {width: 0., height: 0., wrap_around: false, initial_velocity: movement::Velocity(Vec2::new(0., 0.)), simulation_density: 10, step_size: 1., iterations: 10}
     }
 }
+
 impl Map {
     pub fn new(width: f32, height: f32) -> Self {
         Self {width, height, ..default()}
@@ -231,14 +233,36 @@ impl Map {
                 distance += increment;
             }
         }
+
         if spawning_positions.len() == self.simulation_density as usize {
-            let mut spawning_positions_with_velocity: Vec<crate::movement::VelocityPosition> = Vec::new();
-            for position in spawning_positions {
-                spawning_positions_with_velocity.push(crate::movement::VelocityPosition::from_vel_and_pos(self.initial_velocity, position));
+            let mut current_velocitypositions: Vec<crate::movement::VelocityPosition> = Vec::new();
+            let mut vector_positions_with_velocity: Vec<crate::movement::VelocityPosition> = Vec::new();
+
+            for position in &spawning_positions {
+                let vp = crate::movement::VelocityPosition::new(self.initial_velocity, *position);
+                current_velocitypositions.push(vp);
             }
-            return Ok(spawning_positions_with_velocity);
+
+            for _ in 0..self.iterations {
+                let mut next_positions: Vec<crate::movement::VelocityPosition> = Vec::new();
+
+                for velocityposition in &current_velocitypositions {
+                    let mut stepped = velocityposition.clone();
+                    stepped.step(self.step_size);
+                    next_positions.push(stepped);
+                }
+
+                for vp in &next_positions {
+                    vector_positions_with_velocity.push(vp.clone());
+                }
+
+                current_velocitypositions = next_positions;
+            }
+            return Ok(vector_positions_with_velocity);
         }
         else {return Err("Spawning stretch could not be found given the initial velocity's direction.")};
     }
 }
 
+#[cfg(feature = "previewing")]
+pub mod previewing;
