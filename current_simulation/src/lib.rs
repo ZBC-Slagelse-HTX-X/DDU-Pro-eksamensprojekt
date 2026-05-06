@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use std::f32;
 
 pub mod movement;
-mod gravity;
+pub mod gravity;
 
 pub struct Map {
     width: f32,
@@ -12,22 +12,22 @@ pub struct Map {
     pub initial_velocity: movement::Velocity,
     pub simulation_density: u16,
     pub step_size: f32,
-    pub iterations: u32
-}
-
-struct Particle {
-    position: movement::Position,
-    velocity: movement::Velocity 
-}
-
-struct GhostParticle {
-    position: movement::Position,
-    acceleration: movement::Acceleration
+    pub iterations: u32,
+    pub attractors: Option<Vec<gravity::Attractor>>
 }
 
 impl Default for Map {
     fn default() -> Self {
-        Self {width: 0., height: 0., wrap_around: false, initial_velocity: movement::Velocity(Vec2::new(0., 0.)), simulation_density: 10, step_size: 1., iterations: 10}
+        Self {
+            width: 0.,
+            height: 0.,
+            wrap_around: false,
+            initial_velocity: movement::Velocity(Vec2::new(0., 0.)),
+            simulation_density: 10,
+            step_size: 1.,
+            iterations: 10,
+            attractors: None
+        }
     }
 }
 
@@ -37,8 +37,8 @@ impl Map {
     }
     #[must_use]
     pub fn bake_simulation(&self) -> Result<Vec<crate::movement::VelocityPosition>, &str> {
-        assert!(self.simulation_density > 0);
-        let mut angle: f32 = self.initial_velocity.0.to_angle() + f32::consts::PI; // Adding pi as default is returned in rads from -pi to +pi
+        assert!(self.simulation_density > 1);
+        let mut angle: f32 = self.initial_velocity.0.to_angle(); 
 
         let southern_east_corner = Vec2::new(self.width/2., -self.height/2.);
         let northern_east_corner = Vec2::new(self.width/2., self.height/2.);
@@ -47,7 +47,7 @@ impl Map {
 
         let mut spawning_positions: Vec<crate::movement::Position> = Vec::new();
 
-        angle = angle % (2.*f32::consts::PI);
+        angle = angle.rem_euclid(2.0 * f32::consts::PI);
         
         if angle >= 0. && angle <= f32::consts::FRAC_PI_8 {
             eprintln!("Approx east-pointing velocity, western-border");
@@ -247,10 +247,19 @@ impl Map {
                 let mut next_positions: Vec<crate::movement::VelocityPosition> = Vec::new();
 
                 for velocityposition in &current_velocitypositions {
-                    let mut stepped = velocityposition.clone();
-                    stepped.step(self.step_size);
+                    let mut total_accel = Vec2::ZERO;
+    
+                    if let Some(attractors) = &self.attractors {
+                        for attractor in attractors {
+                            let diff = attractor.position.0 - velocityposition.position.0;
+                            let accel = gravity::gravitational_acceleration(attractor.mass, diff);
+                            total_accel += accel.0;
+                        }
+                    }
+
+                    let stepped = velocityposition.step(movement::Acceleration(total_accel), self.step_size);
                     next_positions.push(stepped);
-                }
+                }                        
 
                 for vp in &next_positions {
                     vector_positions_with_velocity.push(vp.clone());
@@ -260,6 +269,7 @@ impl Map {
             }
             return Ok(vector_positions_with_velocity);
         }
+
         else {return Err("Spawning stretch could not be found given the initial velocity's direction.")};
     }
 }

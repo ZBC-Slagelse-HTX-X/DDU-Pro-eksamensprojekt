@@ -10,21 +10,18 @@ pub struct Velocity(pub Vec2);
 
 #[derive(Copy, Clone)]
 pub struct VelocityPosition {
-    position: Position,
-    velocity: Velocity
+    pub position: Position,
+    pub velocity: Velocity
 }
 impl VelocityPosition {
     pub fn new(velocity: Velocity, position: Position) -> Self {
         Self { position, velocity}
     }
-    pub fn step(&self, step: f32) -> Self {
-        Self {position: new_position(self.position.clone(), self.velocity, step), velocity: self.velocity}
+    pub fn step(&self, acceleration: Acceleration, step: f32) -> Self {
+        let new_velocity = Velocity(self.velocity.0 + acceleration.0 * step);
+        let new_position = Position(self.position.0 + new_velocity.0 * step);
+        Self { position: new_position, velocity: new_velocity }
     }
-}
-
-fn velocity_from_acceleration(acceleration: Acceleration, delta: f32) -> Velocity {
-    let velocity_vector: Vec2 = acceleration.0 * delta;
-    return Velocity(velocity_vector);
 }
 
 fn new_position(former_position: Position, velocity: Velocity, delta: f32) -> Position {
