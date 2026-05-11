@@ -1,6 +1,7 @@
 use current_simulator::*;
 use bevy::prelude::*;
 
+#[test]
 fn test_different_angles() {
     use std::f32;
     let mut test_map = Map::new(15., 10.);

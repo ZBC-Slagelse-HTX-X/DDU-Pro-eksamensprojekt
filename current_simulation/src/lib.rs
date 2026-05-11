@@ -48,7 +48,7 @@ impl Map {
         let mut spawning_positions: Vec<crate::movement::Position> = Vec::new();
 
         angle = angle.rem_euclid(2.0 * f32::consts::PI);
-        
+
         if angle >= 0. && angle <= f32::consts::FRAC_PI_8 {
             eprintln!("Approx east-pointing velocity, western-border");
             let position = |distance: f32| -> crate::movement::Position { 

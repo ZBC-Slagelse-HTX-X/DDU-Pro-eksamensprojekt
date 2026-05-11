@@ -1,5 +1,16 @@
 \subsection{Movement-mechanic - white-boxing}
-Det første, der implementeredes, var et rudimentært bevægelsessystem for spillerens avatar. Spilleren kan accelereres i alle hovedretningerne.
+Det første, der implementeredes, var et rudimentært bevægelsessystem for spillerens avatar. Spilleren kan accelereres i alle hovedretningerne, altså nord, syd, øst og vest. For spilleren holdes der til enhver tid styr på spillerens velocitet $\vec{v}$ og position $\vec{OP}$ i form af vektorer. Accelerationen $\vec{a}$ er ikke bundet til spilleren, men er givet øjeblikkeligt.
+
+Når accelerationen er givet, opdateres $\vec{v}$ ved at tillægge ændringen i hastighed $\Delta \vec{v}$, der svarer til den øjeblikkelige multipliceret ændringen i tid, til den gamle hastighed $\vec{v}_0$
+\begin{equation}
+\vec{v}_1 = \vec{v}_0 + \Delta \vec{v} = \vec{v}_0 + \Delta t \cdot \vec{a}
+\end{equation}
+
+Herefter opdateres placeringen af spilleren $\vec{OP}$ ved at tillægge ændringen i position
+\begin{equation}
+\vec{OP}_1 = \vec{OP}_0 + \Delta \vec{P} = \vec{OP}_0 + \Delta t \cdot \vec{v}
+\end{equation}
+
 \todo[inline]{Skriv om implementering af Movement-system (logik) (white-boxing)}
 \todo[inline]{Skriv om implementering af Skyde-system (logik)}
 \todo[inline]{Skriv om spillets stil (kunst)}
