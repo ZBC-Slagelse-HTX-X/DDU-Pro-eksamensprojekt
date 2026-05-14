@@ -13,8 +13,65 @@ Herefter opdateres placeringen af spilleren $\vec{OP}$ ved at tillægge ændring
 
 \todo[inline]{Skriv om implementering af Movement-system (logik) (white-boxing)}
 \todo[inline]{Skriv om implementering af Skyde-system (logik)}
+
+\subsection{Pixel-art}
 \todo[inline]{Skriv om spillets stil (kunst)}
+Til vores spilprojekt har vi valgt at lave alt i pixel-art-stilen. Pixel-art er en moderne form for digital kunst, hvor man replikere stilen fra ældre computerspil, hvor man dengang havde markante hardwarebegrænsninger som gjorde at grafikken havde meget lavere opløsning end i dag. I moderne tid bruger spiludviklerer ofte pixel-art til bevidst at skabe et retro- eller arkadeinspireret udtryk, hvilket passer godt ind i hvad vi ønsker med spillet.
+
+Pixel-art stilen apperllerer til vores målgruppe, europæiske gymnasieelever, gennem sit retro- og arkadeinspirerede udtryk.
+
 \todo[inline]{Skriv om udviklingen af pixel-art (kunst)}
+
+Til udviklingen af spillet har vi måtte producere en række grafiske elementer, som tilsammen skaber spillets visuelle udtryk. Selvom vores målgruppe ikke har et nostalgisk tilhørsforhold, der måske endda kan være kontraproduktivt, til pixel-art og datidens originale hardwarebegrønsninger, men til gengæld har de en romantisk forestilling om arkadekulturen, en anemoia (græsk ánemos "vind" og -noia "sind").\footfullcite{anemoiaGenZ}
+
+
+
+Da spillet er udviklet i pixel-art-stilen, er alle sprites designet med lav opløsning og i et begrænset antal farver for at give spillet et retro- og arkadeinspireret udtryk. De fleste sprites er udviklet i opløsninger mellem (26 px $\times$ 16 px) og (80 px $\times$ 80 px), hvilket både understøtter pixel-art-stilen og reducerer spillets ressourceforbrug. Dette valg passer både til målgruppen (europæiske gymnasieelever) og til spillets relativt simple gameplay, samtidig med at det gør de forskellige objekter tydelige for spilleren.
+
+
+Et af de vigtigste grafiske elementer er den båd spilleren sejler rundt i. 
+For at skabe en mere dynamisk oplevelse har vi designet sprites til båden i flere retninger, herunder: \textit{Vest, Syd-vest, Syd-øst, Syd, Øst, Nord-vest, Nord-øst og Nord}. Spilleren, som sidder i båden, har ligeledes separate sprites til de forskellige retninger, så karakterens orientering passer til bådens bevægelse. Dette gør animationerne mere troværdige og forbedrer spiloplevelsen. Som vist på figur \ref{fig:boat_sprites} er båden udviklet med flere retningsbestemte sprites for at skabe mere dynamiske animationer. Båd-spriten er baseret på båden vist i moodboardet (\ref{apx:moodboard}).
+Båd-spritesne er udviklet i opløsningen (35 px $\times$ 35 px), hvilket gav tilstrækkelig detaljegrad til at spilleren tydeligt kan aflæse bådens retning uden at bryde med spillets simple visuelle stil.
+
+\begin{figure}[H]
+    \centering
+    \fbox{\includegraphics[width=0.7\linewidth]{appendices/sprites/sprites.pdf}}
+    \caption{Sprites til spillerens båd i forskellige retninger.}
+    \label{fig:boat_sprites}
+\end{figure}
+
+Motoren på båden er udviklet som separate sprites fremfor at være en fast del af både-spriten. Dette valg blev truffet ud fra både tekniske og visuelle overvejelser. Ved at opdele motoren fra resten af båden kan motor-spriten rotere uafhængigt af båd-spritens retning, hvilket gør det lettere at implementere styring og bevægelse i spillets kode. Samtidig giver det mulighed for mere fleksible animationer og et mere levende visuelt udtryk.
+
+Derudover har vi udviklet forskellige sprites til plastikaffald, som spilleren skal samle op i løbet af spillet. Vi har valgt at fokusere på tre typer affald: en plastikvandflaske, en plastikdunk og en dåse. Disse objekter er valgt, fordi de er genkendelige former for affald, som ofte forbindes med forurening i havet. Ved at gøre affaldet tydeligt og let genkendeligt bliver spillets budskab om plastikforurening mere direkte for spilleren.
+
+
+Spillet indeholder også en boss-fjende i form af et skraldemonster. Dette monster repræsenterer den ophobning af affald, som findes i havene, eksempelvis i områder som “The Great Pacific Garbage Patch”. Ligesom båden er bossen designet med sprites i flere retninger for at skabe mere flydende bevægelse og gøre mødet med bossen mere dynamisk. Bossens design adskiller sig visuelt fra de normale affaldsobjekter ved at være større og mere detaljeret, så spilleren tydeligt kan identificere den som spillets centrale udfordring. Skraldemonsteret er en videreudvikling af et design vi fandt på Pinterest\footnote{\url{https://uk.pinterest.com/pin/trash-pack-character-trashola-pixel-art--40180621656504620/}}, Vi har brugt Pinterest-designet, som ``skabelon'', og tilpasset det så det passer ind i vores spil samt tilføjet ``retninger'' så den også kan have ryggen imod skærmen. Se \autoref{fig:monster_sprites}, hvor monster-spritesne er vist.
+
+\begin{figure}[H]
+    \centering
+    \fbox{\includegraphics[width=0.7\linewidth]{appendices/sprites/monster.pdf}}
+    \caption{Monster spritesne.}
+    \label{fig:monster_sprites}
+\end{figure}
+
+En stor del af spillets assets er udviklet fra bunden for at sikre et ensartet visuelt udtryk og for at kunne tilpasse grafikken specifikt til målgruppen. Pixel-art-stilen blev valgt, da den både er relativt hurtig at producere inden for projektets tidsramme og samtidig appellerer til unge spillere gennem dens retro-inspirerede udtryk.
+De resterednde sprites kan ses på appendiks \ref{apx:sprites}
+
+
+
+
 \todo[inline]{Skriv om implementering af pixel-art (transform-overvejelser)}
+
+\todo[inline]{Skriv om SFX og musik}
+\subsection{SFX og musik}
+Lyddesign spiller en essentiel rolle i computerspil, da det bidrager til både stemning, feedback og spillerens oplevelse af gameplayet. I vores spil har vi arbejdet med forskellige former for SFX (sound effects) og musik for at understøtte spillets arkadeinspirerede stil og 8-bit æstetik. Den lave bitrate og retroinspirerede lydstil er valgt for at skabe en nostalgisk atmosfære, som passer til spillets visuelle udtryk og hurtige gameplay.
+
+Til udviklingen af alle lyd-elementer har vi anvendt royalty free musik og lydeffekter fra platformene Pixabay\footnote{\url{https://pixabay.com}} og Upbeat\footnote{\url{https://upbeat.io}}. Disse valg gjorde det muligt at benytte musik og lyde uden ophavsretlige problemer, samtidig med at vi kunne finde lydmateriale, der passede til spillets tema da begge indeholder meget store biblioteker af gode lyde med mere.
+
+Der er implementeret flere forskellige typer lydeffekter i spillet. Blandt andet anvendes skudlyde inspireret af små pistoler for at give spilleren tydelig feedback under fights. Derudover er der tilføjet lydeffekter til opsamling af skrald, så spilleren modtager øjeblikkelig lyd-respons ved succesfulde handlinger. Andre SFX omfatter lyde fra flydende skrald i havet samt lyd ved spawning af monstre, hvilket bidrager til at gøre spilverdenen mere levende og dynamisk.
+
+Musikken er opdelt i forskellige kategorier afhængigt af spilsituationen. Den almindelige baggrundsmusik, er af tre tracks og er alle rolige og understøtter udforskning af havmiljøet, mens bossmusikken er mere intens og tempofyldt for at skabe spænding under boss fights. Derudover er der anvendt ambience-lyde fra havet, eksempelvis bølger og undervandsstemning, som hjælper med at skabe immersion og understøtter spillets miljøtema omkring havet og plastikforurening.
+
+Ligesom pixel-art-stilen appellerer 8-bit-lydestetikken til målgruppen — europæiske gymnasieelever — gennem \textit{anemoia}. De karakteristiske chiptune-lyde\footnote{Chiptune er en lydstil opstået fra  hardwarebegrænsningerne i tidlige spillekonsollers lydchips, kendetegnet ved  enkle, syntetiske bølgeformer.} og enkle lydeffekter er ikke noget, målgruppen selv har oplevet i deres opvækst, men de kender dem alligevel som et kulturelt og æstetisk sprog fra moderne spil og internetkulturen. Denne genkendelse uden direkte erindring skaber en særlig tiltrækningskraft, der gør lyddesignet medvirkende til at fastlægge spillet i en æstetik, som målgruppen finder autentisk og engagerende. 8-bit-lyden er således ikke blot en praktisk forenkling — det er et bevidst valg, der møder spilleren i et lyddesign, de intuitivt forbinder med netop den type arkadeinspireret gameplay, som spillet tilbyder.
 \todo[inline]{Skriv om begrænsning af sigtekornet (logik)}
 \todo[inline]{Skriv om hit detection (logik)}
