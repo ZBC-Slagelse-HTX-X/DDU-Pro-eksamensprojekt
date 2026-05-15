@@ -8,7 +8,6 @@ use bevy::{
     },
     window::WindowResized,
 };
-use bevy::camera::ScalingMode;
 
 /// Low-resolution texture that contains the pixel-perfect world.
 /// Canvas itself is rendered to the high-resolution world.
@@ -66,36 +65,22 @@ pub fn setup_camera(mut commands: Commands, mut images: ResMut<Assets<Image>>) {
     let image_handle = images.add(canvas);
 
     // This camera renders whatever is on `PIXEL_PERFECT_LAYERS` to the canvas
-commands.spawn((
-    Camera2d,
-    Camera {
-        order: -1,
-        clear_color: ClearColorConfig::Custom(BLUE.into()),
-        ..default()
-    },
-    Projection::Orthographic(OrthographicProjection {
-        scaling_mode: ScalingMode::Fixed {
-            width: RES_WIDTH as f32,
-            height: RES_HEIGHT as f32,
+    commands.spawn((
+        Camera2d,
+        Camera {
+            // Render before the "main pass" camera
+            order: -1,
+            clear_color: ClearColorConfig::Custom(BLUE.into()),
+            ..default()
         },
-        ..OrthographicProjection::default_2d()
-    }),
-    RenderTarget::Image(image_handle.clone().into()),
-    Msaa::Off,
-    InGameCamera,
-    PIXEL_PERFECT_LAYERS,
-));
+        RenderTarget::Image(image_handle.clone().into()),
+        Msaa::Off,
+        InGameCamera,
+        PIXEL_PERFECT_LAYERS,
+    ));
 
-// When spawning the canvas sprite:
-commands.spawn((
-    Sprite {
-        image: image_handle,
-        custom_size: Some(Vec2::new(RES_WIDTH as f32, RES_HEIGHT as f32)),
-        ..default()
-    },
-    Canvas,
-    HIGH_RES_LAYERS,
-));
+    // Spawn the canvas
+    commands.spawn((Sprite::from_image(image_handle), Canvas, HIGH_RES_LAYERS));
 
     // The "outer" camera renders whatever is on `HIGH_RES_LAYERS` to the screen.
     // here, the canvas and one of the sample sprites will be rendered by this camera
@@ -103,31 +88,16 @@ commands.spawn((
 }
 
 /// Scales camera projection to fit the window (integer multiples only).
-pub fn fit_canvas_startup(
-    mut projection: Single<&mut Projection, With<OuterCamera>>,
-    window: Single<&Window>,
-) {
-    let Projection::Orthographic(projection) = &mut **projection else {
-        return;
-    };
-    let h_scale = (window.physical_width() as f32 / RES_WIDTH as f32).floor();
-    let v_scale = (window.physical_height() as f32 / RES_HEIGHT as f32).floor();
-    let scale = h_scale.min(v_scale).max(1.0);
-    projection.scale = 1.0 / scale;
-    println!("window: {}x{}, h_scale: {}, v_scale: {}, projection.scale: {}", 
-        window.physical_width(), window.physical_height(), h_scale, v_scale, projection.scale);
-}
-
 pub fn fit_canvas(
-    mut resize_events: MessageReader<WindowResized>,
+    mut resize_messages: MessageReader<WindowResized>,
     mut projection: Single<&mut Projection, With<OuterCamera>>,
 ) {
     let Projection::Orthographic(projection) = &mut **projection else {
         return;
     };
-    for e in resize_events.read() {
-        let h_scale = (e.width / RES_WIDTH as f32).floor();
-        let v_scale = (e.height / RES_HEIGHT as f32).floor();
-        projection.scale = 1.0 / h_scale.min(v_scale).max(1.0);
+    for window_resized in resize_messages.read() {
+        let h_scale = window_resized.width / RES_WIDTH as f32;
+        let v_scale = window_resized.height / RES_HEIGHT as f32;
+        projection.scale = 1. / h_scale.min(v_scale);
     }
 }

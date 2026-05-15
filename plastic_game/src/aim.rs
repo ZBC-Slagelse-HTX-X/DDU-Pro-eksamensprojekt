@@ -9,6 +9,7 @@ pub fn aim_plugin (app: &mut App) {
             change_aim_velocity,
             update_aim_position,
             minimum_aim_distance,
+            maximum_aim_distance,
             shooting
         ));
 }
@@ -89,6 +90,21 @@ pub fn minimum_aim_distance (
         current_velocity.0 = Vec2::ZERO;
     }
 }
+
+pub fn maximum_aim_distance (
+    mut current_shooting_pos: Single<&mut Transform, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
+    mut current_velocity: Single<&mut crate::movement::Velocity, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
+) {
+    const MAXIMUM_DISTANCE: f32 = 480.;
+    let flat_pos = current_shooting_pos.translation.truncate();
+    if flat_pos.length() > MAXIMUM_DISTANCE {
+        let z_value: f32 = current_shooting_pos.translation.z;
+        let flat_pos = flat_pos.clamp_length_max(MAXIMUM_DISTANCE);
+        current_shooting_pos.translation = flat_pos.extend(z_value);
+        current_velocity.0 = Vec2::ZERO;
+    }
+}
+
 
 pub fn update_aim_position (
     query: Single<(&mut Transform, &crate::movement::Velocity), (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
