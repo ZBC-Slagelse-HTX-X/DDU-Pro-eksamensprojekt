@@ -17,7 +17,7 @@
     backend=biber,
     style=authoryear-icomp,
     natbib=true,
-    url=false,
+    url=true,
     doi=true,
     eprint=false
 ]{biblatex}
@@ -29,7 +29,7 @@
 \newpage
 \pagenumbering{arabic}
 
-\section{Forord}
+\section*{Forord}
 \input{kapitler/forord.tex}
 
 \tableofcontents
@@ -93,7 +93,9 @@
 \todo[inline]{Kapitel: Perspektivering}
 \newpage
 
+
 \printbibliography[heading=bibintoc, title={Bibliografi}]
+\newpage
 
 \section{Bilag}
 \appendix
@@ -123,5 +125,26 @@
 \renewcommand{\thepage}{D\arabic{page}}
 \pagenumbering{arabic}
 \input{appendices/standups/appendiks.tex}
+\newpage
+
+\null\vfill
+\subsection{Appendiks E ``Sprites''}
+\label{apx:sprites}
+Spritesne er alle markant opskaleret og kan derfor fremgå lidt ``sjove'' på billederne.
+\renewcommand{\thepage}{E\arabic{page}}
+\pagenumbering{arabic}
+\includepdf[pages=-, landscape=true, nup=1x1, frame=true, scale=0.9, pagecommand={}]{appendices/sprites/sprites.pdf}
+\includepdf[pages=-, landscape=true, nup=1x1, frame=true, scale=0.9, pagecommand={}]{appendices/sprites/motor.pdf}
+\includepdf[pages=-, landscape=true, nup=1x1, frame=true, scale=0.9, pagecommand={}]{appendices/sprites/monster.pdf}
+\includepdf[pages=-, landscape=true, nup=1x1, frame=true, scale=0.9, pagecommand={}]{appendices/sprites/spiller.pdf}
+\includepdf[pages=-, landscape=true, nup=1x1, frame=true, scale=0.9, pagecommand={}]{appendices/sprites/trash_sprites.pdf}
+\newpage
+
+\null\vfill
+\subsection{Appendiks F ``Moodboard''}
+\label{apx:moodboard}
+\renewcommand{\thepage}{F\arabic{page}}
+\pagenumbering{arabic}
+\input{appendices/moodboard/appendiks.tex}
 \newpage
 \end{document}
