@@ -8,9 +8,17 @@
 \usepackage{pdfpages}
 \usepackage{hyperref}
 \usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{geometry}
+\usepackage{array}
 \usepackage{float}
 \usepackage{pdflscape}
 \usepackage{csquotes}
+\usepackage{caption}
+\usepackage{multirow}
+
+
 \usepackage[
     backend=biber,
     style=authoryear-icomp,
@@ -20,12 +28,23 @@
     eprint=false
 ]{biblatex}
 \addbibresource{bibliografi.bib}
+
+\definecolor{steamblue}{RGB}{27, 40, 56}
+\definecolor{steamlightblue}{RGB}{102, 192, 244}
+\definecolor{rowgray}{RGB}{240, 243, 246}
+\definecolor{windowsgreen}{RGB}{0, 120, 215}
+\definecolor{macgray}{RGB}{100, 100, 100}
+\definecolor{linuxorange}{RGB}{221, 110, 16}
+ 
+
 \begin{document}
 \pagenumbering{gobble}
 \input{kapitler/forside.tex}
 \pagenumbering{Roman} \restoregeometry
 \newpage
 \pagenumbering{arabic}
+
+
 
 \section*{Forord}
 \input{kapitler/forord.tex}

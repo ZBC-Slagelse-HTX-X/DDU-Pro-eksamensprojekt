@@ -1,3 +1,15 @@
+\subsection{Flow}
+Før vi begynder med den konkrete udvikling af spillet, er det vigtigt, helt strukturelt, at vi opbygger spillet med flow--teorien\footfullcite{flow} i tankerne. Flow--teorien beskriver, hvordan en spiller bedst bliver underholdt når han spiller et computerspil.
+Hvis ens computerspil for hurtigt viser en meget høj sværhedsgrad, så giver det spilleren en angstlig følelse, hvilke virker negativt på hans lyst til at fortsætte med at spille spillet, og det er ikke hensigtsmæssigt. Hvis spillet derimod er af en lav sværhedsgrad og spillerens kompetenceniveau er for stort, vil spilleren kede sig og afbryde spillet. Hensigten er derfor at skabe et spil som gradvist øger sværhedsgraden sammenløbende med at spillerens kompetencer forøges.
+
+\begin{figure}[H]
+    \centering
+    \fbox{\includegraphics[width=0.5\linewidth]{assets/flow.jpg}}
+    \caption{Viser flowstadiet. Kilde: \cite{flow_chart}}
+\end{figure}
+
+Som vi beksriver senere i rapporten, bliver spillet på et tidspunkt udgivet i en Early Access udgave, her vil vi få en større spillerbase og teste flow på. Vi har derfor en masse konstanter i spillet som vi i Early Access vil kunne skrue på for at opnå det optimale flow.
+
 \subsection{Movement-mechanic - white-boxing}
 Det første, der implementeredes, var et rudimentært bevægelsessystem for spillerens avatar. Spilleren kan accelereres i alle hovedretningerne, altså nord, syd, øst og vest. For spilleren holdes der til enhver tid styr på spillerens velocitet $\vec{v}$ og position $\vec{OP}$ i form af vektorer. Accelerationen $\vec{a}$ er ikke bundet til spilleren, men er givet øjeblikkeligt.
 
@@ -14,13 +26,17 @@ Herefter opdateres placeringen af spilleren $\vec{OP}$ ved at tillægge ændring
 \todo[inline]{Skriv om implementering af Movement-system (logik) (white-boxing)}
 \todo[inline]{Skriv om implementering af Skyde-system (logik)}
 
-\subsection{Pixel-art}
+
 \todo[inline]{Skriv om spillets stil (kunst)}
+\subsection{Valg af stilart samt inputmetode}
 Til vores spilprojekt har vi valgt at lave alt i pixel-art-stilen. Pixel-art er en moderne form for digital kunst, hvor man replikere stilen fra ældre computerspil, hvor man dengang havde markante hardwarebegrænsninger som gjorde at grafikken havde meget lavere opløsning end i dag. I moderne tid bruger spiludviklerer ofte pixel-art til bevidst at skabe et retro- eller arkadeinspireret udtryk, hvilket passer godt ind i hvad vi ønsker med spillet.
 
 Pixel-art stilen apperllerer til vores målgruppe, europæiske gymnasieelever, gennem sit retro- og arkadeinspirerede udtryk.
 
+Vi har ligeledes valgt at udvilke spillet til controller, for at ydeliger appellerer til vores målgruppe. Dette giver en mere analog oplevelse af spillet.
+
 \todo[inline]{Skriv om udviklingen af pixel-art (kunst)}
+\subsection{Pixel-art}
 
 Til udviklingen af spillet har vi måtte producere en række grafiske elementer, som tilsammen skaber spillets visuelle udtryk. Selvom vores målgruppe ikke har et nostalgisk tilhørsforhold, der måske endda kan være kontraproduktivt, til pixel-art og datidens originale hardwarebegrønsninger, men til gengæld har de en romantisk forestilling om arkadekulturen, en anemoia (græsk ánemos "vind" og -noia "sind").\footfullcite{anemoiaGenZ}
 
@@ -56,6 +72,18 @@ Spillet indeholder også en boss-fjende i form af et skraldemonster. Dette monst
 
 En stor del af spillets assets er udviklet fra bunden for at sikre et ensartet visuelt udtryk og for at kunne tilpasse grafikken specifikt til målgruppen. Pixel-art-stilen blev valgt, da den både er relativt hurtig at producere inden for projektets tidsramme og samtidig appellerer til unge spillere gennem dens retro-inspirerede udtryk.
 De resterednde sprites kan ses på appendiks \ref{apx:sprites}
+
+\textbf{Trawler}\\
+Trawler-asseten er blevet lavet med generativ AI (specifikt ChatGPT) Vi har valgt at bruge generativ AI til at lave denne asset, da den er ret kompliceret, og vores grafiske og kreative enskaber må siges at være begrænsede. Trawleren skal være inde for 150px $\times$ 150px og den skal være i profil. Vi har derfor promptet modellen med: \textit{``lav en oliefedtet trawler i profil i stilen pixel-art, den skal være øst-gående. 150px $\times$ 150 px''}. Promptet gav faktisk første gang to meget brugbare assets, disse fortager vi en A/B test af for at finde ud af hvilken er bedst til vores formål. Denne A/B test foretog vi uformeldt i person, hvor vi spurgte 10 venner/bekendte hvilken de syntes bedst om til vores skraldeopsamlingsspil. Vi fortalte dem at trawleren skulle være ond og oliefedtet. Ud af de 10, mente 7 at trawler A var den bedste til formålet.
+
+\begin{figure}[H]
+    \centering
+    \fbox{\includegraphics[width=0.7\linewidth]{assets/ai_trawler_abtest.pdf}}
+    \caption{Billeder af AI-genereret trawler assets brugt til A/B test}
+    \label{fig:trawler_ab_test}
+\end{figure}
+
+Nu hvor trawleren blev valgt, skal den klargøres til at indsættes i spillet. Det betyder at den skal klippes ud af baggrunden som AI-modellen ikke ville fjerne. Dette gjorde vi ved Photopea, hvor vi benyttede Magic Wand-featuren. Dernæst spejlede vi den om y-aksen for at få begge retninger. 
 
 
 

@@ -1,9 +1,98 @@
 \todo[inline]{Beskriv antagelse om at spillets aktiver er propritære (og ikke open-source, som de faktisk er nu grundet nemhedens skyld)}
+
 \todo[inline]{Prisovervejelser}
+\subsection{Prisovervejelser}
+Hvis vores spil i fremtiden skulle udgives, er det essentielt at vi overvejer en pris. For at vi kan gøre det, vurderer vi at det er hensigtsmæssigt at vi sammenligner vores spil med andre lignende uafhængingt producerede spil på markdet (specifikt på Steam)
+
+Tabel \ref{tab:priser} 
+viser en oversigt over udvalgte sammenlignelige titler og deres nuværende priser.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\hline
+\textbf{Spil} & \textbf{Genre/stil} & \textbf{Pris (Steam)} \\
+\hline
+\textit{Hotline Miami}  & Top-down arkadeskydespil, pixel-art & \$9{,}99 \\
+\textit{Nuclear Throne} & Top-down arkadeskydespil, pixel-art & \$11{,}99 \\
+\textit{Undertale}      & Indie RPG, pixel-art, lille scope   & \$9{,}99 \\
+\textit{Celeste}        & Indie platformer, pixel-art         & \$19{,}99 \\
+\hline
+\end{tabular}
+\caption{Sammenlignelige indie-spil og deres priser på Steam (maj 2026).}
+\label{tab:priser}
+\end{table}
+
+De spil vi har valgt at indrage til sammenligningen, er alle indie-spil (uafhængigt producerede spil) i pixel-art stilen. De spil vi sammenligner os med ligger alle i prislejet \$9,99 --\$19,99.
+
+Da vores spil er et skoleprojekt i af begrænset omfang og med begrænsede midler, ville det derfor være urimeligt at udgive og prisætte et semi-færdigt spil på niveau med spil som er udviklet af et professionelt spiludviklingsstudie over flere år. Så vi vurderer at når spillet udgives i Early Accees, skal det derfor være gratis, indtil det udkommer i full release. Full release-versionen bør prisættes i prislejet \$5--\$8
+
+
+
 \todo[inline]{Platformovervejelser}
+\subsection{Platformovervejelser}
+Da der er utalligt mange forskellige styresystemer, er det meget relavant at kigge på hvilke af disse vi bør udgive spillet til. Da vi har lavet spillet via Bevy, er det rimligt nemt at kompilere spillet til alverdens forskellige systemer.
+
+For at udvælge hvilke styresystemer vi skal udgive spillet til, kan vi igen bruge Steam Hardware \& Software Survey\footfullcite{steamSurvey2026} Her kigger vi specifikt på ``OS-version''
+
+\begin{table}[H]
+\centering
+\caption*{\large\bfseries Steam Hardware \& Software Survey --- April 2026\\[4pt]
+\normalsize\normalfont Top 3 operativsystemversioner per kategori}
+\vspace{6pt}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{
+  l
+  l
+  r
+  r
+}
+\toprule
+\rowcolor{steamblue}
+\textcolor{white}{\textbf{Kategori}} &
+\textcolor{white}{\textbf{OS-version}} &
+\textcolor{white}{\textbf{Andel}} &
+\textcolor{white}{\textbf{Ændring}} \\
+\midrule
+ 
+% Windows
+\textcolor{windowsgreen}{\textbf{Windows}} & Windows 11 64-bit  & 67{,}74\,\% & $+1{,}14$\,\% \\
+\rowcolor{rowgray}
+                  & Windows 10 64-bit  & 25{,}63\,\% & $+0{,}27$\,\% \\
+                  & Windows 7 64-bit   &  0{,}07\,\% & $-0{,}01$\,\% \\
+\midrule
+ 
+% macOS
+\rowcolor{rowgray}
+\textcolor{macgray}{\textbf{macOS}} & macOS 26.3.1 64-bit  & 0{,}49\,\% & $0{,}00$\,\% \\
+                  & macOS 26.4.0 64-bit  & 0{,}27\,\% & $+0{,}20$\,\% \\
+\rowcolor{rowgray}
+                  & macOS 15.4.1 64-bit  & 0{,}20\,\% & $+0{,}20$\,\% \\
+\midrule
+ 
+% Linux
+\textcolor{linuxorange}{\textbf{Linux}} & Arch Linux 64-bit      & 0{,}32\,\% & $-0{,}02$\,\% \\
+\rowcolor{rowgray}
+                  & Linux Mint 22.3 64-bit & 0{,}27\,\% & $0{,}00$\,\% \\
+                  & Ubuntu Core 24 64-bit  & 0{,}13\,\% & $-0{,}01$\,\% \\
+ 
+\bottomrule
+\end{tabular}
+ 
+\vspace{6pt}
+\footnotesize\textit{Kilde: store.steampowered.com/hwsurvey — kombinerede platformsdata (Windows, Mac og Linux).}
+\end{table}
+
+Sammenlagt sider Windows på $93,47\%$ af hele Steams brugerbase. OSX (Apple) $2.01\%$ og Linux på $4,52\%$. 
+
+Det vil sige at for at ramme flest muligt bør vi understøtte som minimum Windows 10 og Windows 11.
+
+
+
 \todo[inline]{Lanceringskampagne}
 \todo[inline]{Fremtidige opdateringer}
 \todo[inline]{Early Access-development (versus ``gammeldags'' udvikling [golden edition])}
+\subsection{Udgivningsstadie}
 Spilvirksomheder udgiver sjældent et spil 100\% første gang. Man taler ofte om ``The software release life cycle'' — denne beskriver udviklings-, test- og distribueringsfaserne af et stykke software.\footfullcite{softwareRelease}
 
 \begin{figure}[H]
