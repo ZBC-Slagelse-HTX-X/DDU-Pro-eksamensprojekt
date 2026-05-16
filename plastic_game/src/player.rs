@@ -15,6 +15,7 @@ pub fn spawn_player(
     // The sample sprite that will be rendered to the pixel-perfect canvas
     commands.spawn((
         PlayerAvatar,
+        crate::enemies::Health::player(),
         crate::movement::NonWrappable,
         Sprite::from_image(asset_server.load("sprites/boat/syd_øst.png")),
         Transform::from_xyz(0., 0., 1.),
@@ -35,6 +36,7 @@ pub fn spawn_player(
         )]
     ));
 }
+
 pub fn player_movement_plugin(app: &mut App) {
     app
         .add_systems(Update, (change_player_acceleration, change_player_velocity, update_player_position).run_if(in_state(crate::GameState::Game)));
@@ -88,11 +90,22 @@ pub fn change_player_velocity (
     current_acceleration: Single<&crate::movement::Acceleration, (With<PlayerAvatar>, Without<crate::aim::PlayerAim>)>,
     time: Res<Time>
 )  {
-    const THERMAL_SPEED: f32 = 125.;
+    const FRICTION: f32 = 20.;
+    const THERMAL_SPEED: f32 = 70.;
     let mut change_in_velocity: Vec2 = Vec2::ZERO;
     change_in_velocity = current_acceleration.0 * time.delta_secs();
     current_velocity.0 += change_in_velocity;
     current_velocity.0 = current_velocity.0.clamp_length_max(THERMAL_SPEED);
+    if current_velocity.0.length() > 0. {
+        if FRICTION * time.delta_secs() > current_velocity.0.length() {
+            current_velocity.0 = Vec2::ZERO;
+        }
+        else {
+            let direction_of_movement = current_velocity.0.clone().normalize_or_zero();
+            current_velocity.0 += FRICTION * -direction_of_movement * time.delta_secs(); 
+        }
+    }
+
 }
 
 pub fn update_player_position(

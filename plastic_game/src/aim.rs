@@ -10,7 +10,9 @@ pub fn aim_plugin (app: &mut App) {
             update_aim_position,
             minimum_aim_distance,
             maximum_aim_distance,
-            shooting
+            shooting.run_if(in_state(crate::items::CharacterMode::Shooting)),
+            travel_bullet,
+            despawn_bullets
         ));
 }
 
@@ -61,7 +63,7 @@ pub fn change_aim_velocity (
     current_acceleration: Single<&crate::movement::Acceleration, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
     time: Res<Time>
 )  {
-    const THERMAL_SPEED: f32 = 150.;
+    const THERMAL_SPEED: f32 = 125.;
     const FRICTION: f32 = 300.;
     let change_in_velocity = current_acceleration.0 * time.delta_secs();
     current_velocity.0 += change_in_velocity;
@@ -95,7 +97,7 @@ pub fn maximum_aim_distance (
     mut current_shooting_pos: Single<&mut Transform, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
     mut current_velocity: Single<&mut crate::movement::Velocity, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
 ) {
-    const MAXIMUM_DISTANCE: f32 = 480.;
+    const MAXIMUM_DISTANCE: f32 = 270.;
     let flat_pos = current_shooting_pos.translation.truncate();
     if flat_pos.length() > MAXIMUM_DISTANCE {
         let z_value: f32 = current_shooting_pos.translation.z;
@@ -115,30 +117,74 @@ pub fn update_aim_position (
     aim_position.translation += change_in_position.extend(0.0);
 }
 
-fn shooting (
+#[derive(Component)]
+pub struct Bullet;
+
+fn shooting(
     keyboard_input: Res<ButtonInput<KeyCode>>,
     mode: Res<crate::movement::InputMode>,
     gamepad: Option<Single<&Gamepad>>,
-    current_shooting_pos: Single<&Transform, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
-    current_player_pos: Single<&Transform, (With<crate::player::PlayerAvatar>, Without<PlayerAim>)>
+    current_shooting_pos: Single<&GlobalTransform, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
+    current_player_pos: Single<&Transform, (With<crate::player::PlayerAvatar>, Without<PlayerAim>)>,
+    asset_server: Res<AssetServer>,
+    mut commands: Commands,
 ) {
-    match *mode {
-        crate::movement::InputMode::Keyboard => {
-            if keyboard_input.just_pressed(KeyCode::Space) {
-                eprintln!("Shot at: {}", current_shooting_pos.translation);
-                eprintln!("Shot from: {}", current_player_pos.translation);
-            }
-        },
+    let fired = match *mode {
+        crate::movement::InputMode::Keyboard => keyboard_input.just_pressed(KeyCode::Space),
         crate::movement::InputMode::Controller => {
             if let Some(gamepad) = gamepad {
-                const THRESHOLD: f32 = 0.5;
-                let trigger_button = gamepad.get(GamepadButton::RightTrigger2).unwrap();
-                if trigger_button > THRESHOLD {
-                    eprintln!("Shot at: {}", current_shooting_pos.translation);
-                    eprintln!("Shot from: {}", current_player_pos.translation);
-                }
-            };
+                gamepad.just_pressed(GamepadButton::RightTrigger2)
+            } else {
+                false
+            }
         }
+    };
 
+    if !fired {
+        return;
+    }
+    const PROJECTILE_PATH: &str = "sprites/bullet/projectile.png";
+    const BULLET_SPEED: f32 = 200.; // Px s^-1
+    const ARM_LENGTH: f32 = 20.; // Px
+    const Z_VALUE: f32 = 0.25;
+
+    let player_pos = current_player_pos.translation.truncate();
+    let target = current_shooting_pos.translation().truncate();
+    let direction = (target - player_pos).normalize();
+    let bullet_origin = player_pos + direction*ARM_LENGTH;
+    let angle = direction.to_angle(); // angle in radians from Vec2
+    let rotation = Quat::from_rotation_z(angle + std::f32::consts::FRAC_PI_2);
+    eprintln!("Shot from: {} at: {}", player_pos, target);
+    commands.spawn((
+        Bullet,
+        Sprite::from_image(asset_server.load(PROJECTILE_PATH)),
+        Transform::from_translation(bullet_origin.extend(Z_VALUE)).with_rotation(rotation),
+        crate::movement::Velocity::from_vec(direction*BULLET_SPEED),
+        crate::pixel_grid::PIXEL_PERFECT_LAYERS,
+    ));
+}
+
+fn travel_bullet(
+    bullet_query: Query<(&mut Transform, &crate::movement::Velocity), With<Bullet>>,
+    time: Res<Time>
+) {
+    for (mut transform, velocity) in bullet_query {
+        transform.translation += (velocity.0 * time.delta_secs()).extend(0.);
+    }
+}
+
+fn despawn_bullets(
+    mut commands: Commands,
+    query: Query<(Entity, &Transform), With<Bullet>>,
+) {
+    const TOLERANCE: f32 = 4.0;
+    let half_width = crate::pixel_grid::RES_WIDTH as f32 / 2.0 + TOLERANCE;
+    let half_height = crate::pixel_grid::RES_HEIGHT as f32 / 2.0 + TOLERANCE;
+
+    for (entity, transform) in query.iter() {
+        let pos = transform.translation.truncate();
+        if pos.x.abs() > half_width || pos.y.abs() > half_height {
+            commands.entity(entity).despawn();
+        }
     }
 }

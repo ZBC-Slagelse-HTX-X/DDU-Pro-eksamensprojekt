@@ -14,6 +14,16 @@ impl Default for Velocity {
     }
 }
 
+impl Velocity {
+    pub fn new(x: f32, y:f32) -> Self {
+        Self (Vec2::new(x, y))
+    }
+    pub fn from_vec(vec: Vec2) -> Self {
+        Self (vec)
+    }
+
+}
+
 #[derive(Component)]
 pub struct Acceleration(pub Vec2);
 
@@ -31,22 +41,14 @@ pub enum InputMode {
 }
 
 pub fn change_inputmode(
-    keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut mode: ResMut<crate::movement::InputMode>,
+    mut mode: ResMut<InputMode>,
     gamepad: Option<Single<&Gamepad>>,
 ) {
-    match *mode {
-        crate::movement::InputMode::Keyboard => {
-            if let Some(gamepad) = gamepad {
-                *mode = crate::movement::InputMode::Controller;
-            } 
-        },
-        crate::movement::InputMode::Controller => {
-            if gamepad.is_none() {
-                *mode = crate::movement::InputMode::Keyboard;
-            } 
-        }
-    }
+    *mode = if gamepad.is_some() {
+        InputMode::Controller
+    } else {
+        InputMode::Keyboard
+    };
 }
 
 #[derive(Component)]
