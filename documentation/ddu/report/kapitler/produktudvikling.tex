@@ -11,7 +11,7 @@ Hvis ens computerspil for hurtigt viser en meget høj sværhedsgrad, så giver d
 Som vi beksriver senere i rapporten, bliver spillet på et tidspunkt udgivet i en Early Access udgave, her vil vi få en større spillerbase og teste flow på. Vi har derfor en masse konstanter i spillet som vi i Early Access vil kunne skrue på for at opnå det optimale flow.
 
 \subsection{Movement-mechanic - white-boxing}
-Det første, der implementeredes, var et rudimentært bevægelsessystem for spillerens avatar. Spilleren kan accelereres i alle hovedretningerne, altså nord, syd, øst og vest. For spilleren holdes der til enhver tid styr på spillerens velocitet $\vec{v}$ og position $\vec{OP}$ i form af vektorer. Accelerationen $\vec{a}$ er ikke bundet til spilleren, men er givet øjeblikkeligt.
+Det første, der implementeredes, var et rudimentært bevægelsessystem for spillerens avatar. Spilleren kan accelereres i alle hovedretningerne, altså nord, syd, øst og vest. For spilleren holdes der til enhver tid styr på spillerens hastighed $\vec{v}$ og position $\vec{OP}$ i form af vektorer. Accelerationen $\vec{a}$ er ikke bundet til spilleren, men er givet øjeblikkeligt og påvirker altså hastigheden, der igen påvirker positionen.
 
 Når accelerationen er givet, opdateres $\vec{v}$ ved at tillægge ændringen i hastighed $\Delta \vec{v}$, der svarer til den øjeblikkelige multipliceret ændringen i tid, til den gamle hastighed $\vec{v}_0$
 \begin{equation}
@@ -22,6 +22,20 @@ Herefter opdateres placeringen af spilleren $\vec{OP}$ ved at tillægge ændring
 \begin{equation}
 \vec{OP}_1 = \vec{OP}_0 + \Delta \vec{P} = \vec{OP}_0 + \Delta t \cdot \vec{v}
 \end{equation}
+
+Således er der altså anvendt Newtonisk fysik; det er oplagt, da det er let at have med kræfterne, vi har at gøre med, mens vi har anvendt vektorregning, da vektorer har retning og størrelse, hvilket kræfter også har. Således behøver vi ikke at forholde os til x- og y-koordinaterne direkte. Udover at det er nemmere at kode, bør det også introducere færre fejl, hvor det sidste kommer slutbrugeren til gode.
+
+Selve accelerationen er givet ved, brugerens input (dynamic) til ethvert øjeblik. Følgende keyboardtaster korresponderer til følgende
+\begin{itemize}
+  \item \mintinline{bash}{w} $\rightarrow$ acceleration i nordlige retning
+  \item \mintinline{bash}{a} $\rightarrow$ acceleration i vestlige retning
+  \item \mintinline{bash}{s} $\rightarrow$ acceleration i sydlige retning
+  \item \mintinline{bash}{d} $\rightarrow$ acceleration i østlige retning
+\end{itemize}
+
+Bemærk, at dette er alle hovedretninger. Valget på netop de taster falder på, at det er etablerede konvention. Således bør det gerne være intuitivt for spilleren, og denne bør hurtigt kunne tilegne sig en evne til at bevæge sig, hvilket bør vække tilfredsstillelse hos spilleren.
+
+Til at teste, brugte vi et simpelt mesh i en simpel 2D-verden.
 
 \todo[inline]{Skriv om implementering af Movement-system (logik) (white-boxing)}
 \todo[inline]{Skriv om implementering af Skyde-system (logik)}

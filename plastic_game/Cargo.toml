@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 bevy = { version = "0.18.1", features = ["dynamic_linking", "wayland", "gamepad"] }
 current_simulation = { path = "../current_simulation" }
+rand = "0.10.1"
