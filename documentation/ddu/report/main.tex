@@ -9,6 +9,7 @@
 \usepackage{pdfpages}
 \usepackage{hyperref}
 \usepackage{minted}
+\usepackage{subcaption}
 \setminted{
   bgcolor=gray!10,
   breaklines=true,
@@ -174,4 +175,23 @@ Spritesne er alle markant opskaleret og kan derfor fremgå lidt ``sjove'' på bi
 \pagenumbering{arabic}
 \input{appendices/moodboard/appendiks.tex}
 \newpage
+
+\null\vfill
+\subsection{Appendiks F ``Project Plastic Waste Logos''}
+
+\newpage
+\label{apx:PPW_logos}
+\renewcommand{\thepage}{F\arabic{page}}
+\pagenumbering{arabic}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{appendices/logos/PPW_logo_1.png}
+    \caption{AI billede til trailer}
+  \end{figure}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{appendices/logos/PPW_logo_2.png}
+    \caption{AI splash screen}
+  \end{figure}
 \end{document}
+  
