@@ -10,6 +10,69 @@ Hvis ens computerspil for hurtigt viser en meget høj sværhedsgrad, så giver d
 
 Som vi beksriver senere i rapporten, bliver spillet på et tidspunkt udgivet i en Early Access udgave, her vil vi få en større spillerbase og teste flow på. Vi har derfor en masse konstanter i spillet som vi i Early Access vil kunne skrue på for at opnå det optimale flow.
 
+\todo[inline]{paper-dummy (ekstern)}
+\subsection{Paper-dummy - test I}
+Paper dummys er et værktøj, som bruges tidligt i udviklingsfasen af et computerspil. 
+Paper dummys er groft sagt at omsætte en spillidé til et brætspil for at teste dets 
+spilmekanikker. Det er en billig, hurtig og nem lavteknologisk metode, som giver os 
+mulighed for hurtigt at afprøve og diskutere ideer, uden at have investeret mange timer 
+i udviklingen af en del af spillet, som måske ender med at være dårlig.
+
+Vi har benyttet paper dummy-metoden til at teste vores grundlæggende spilmekanikker, 
+herunder bevægelse, skydning, opsamling, monster-spawning og skralde-spawning i 
+sammenspil med havstrømmene. Som det fremgår af \autoref{fig:main}, blev et simpelt 
+gitter tegnet på papir, og vi krøllede papirskugler sammen som plastikskraldssimulatorer. 
+Vores testperson fik reglerne at vide, og testen gik i gang.
+
+Undervejs i testen fandt vi ud af, at der var mange regler, vi ikke havde tænkt over, 
+hvilket resulterede i, at testsubjektet blev meget frustreret, da vi blev nødt til at 
+tilføje regler ad hoc.
+
+Paper dummyen udmundende i at, inden den entlige spiludvikling startede, skulle vi have præciseret reglerne meget mere.
+
+
+\begin{figure}[H]
+    \centering
+  % --- Row 1: three images ---
+  \begin{subfigure}[t]{0.32\textwidth}
+    \fbox{\includegraphics[width=\linewidth]{assets/paper_dummy_1.jpg}}
+    % \caption{Caption a}
+    \label{fig:a}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.32\textwidth}
+    \fbox{\includegraphics[width=\linewidth]{assets/paper_dummy_2.jpg}}
+    % \caption{Caption b}
+    \label{fig:b}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.32\textwidth}
+    \fbox{\includegraphics[width=\linewidth]{assets/paper_dummy_3.jpg}}
+    % \caption{Caption c}
+    \label{fig:c}
+  \end{subfigure}
+
+  \vspace{4pt} % small gap between rows
+
+  % --- Row 2: two images centred ---
+  \begin{subfigure}[t]{0.32\textwidth}
+    \fbox{\includegraphics[width=\linewidth]{assets/paper_dummy_4.jpg}}
+    % \caption{Caption d}
+    \label{fig:d}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.32\textwidth}
+    \fbox{\includegraphics[width=\linewidth]{assets/paper_dummy_5.jpg}}
+    % \caption{Caption e}
+    \label{fig:e}
+  \end{subfigure}
+
+  \caption{Paper Dummy Testing.}
+  \label{fig:main}
+\end{figure}
+
+
+
 \subsection{Movement-mechanic - white-boxing}
 Det første, der implementeredes, var et rudimentært bevægelsessystem for spillerens avatar. Spilleren kan accelereres i alle hovedretningerne, altså nord, syd, øst og vest. For spilleren holdes der til enhver tid styr på spillerens hastighed $\vec{v}$ og position $\vec{OP}$ i form af vektorer. Accelerationen $\vec{a}$ er ikke bundet til spilleren, men er givet øjeblikkeligt og påvirker altså hastigheden, der igen påvirker positionen.
 
@@ -39,6 +102,7 @@ Til at teste, brugte vi et simpelt mesh, fremfor en sprite, som det er i vores e
 
 \todo[inline]{Skriv om implementering af Movement-system (logik) (white-boxing)}
 \todo[inline]{Skriv om implementering af Skyde-system (logik)}
+
 
 
 \todo[inline]{Skriv om spillets stil (kunst)}
@@ -87,7 +151,7 @@ Spillet indeholder også en boss-fjende i form af et skraldemonster. Dette monst
 En stor del af spillets assets er udviklet fra bunden for at sikre et ensartet visuelt udtryk og for at kunne tilpasse grafikken specifikt til målgruppen. Pixel-art-stilen blev valgt, da den både er relativt hurtig at producere inden for projektets tidsramme og samtidig appellerer til unge spillere gennem dens retro-inspirerede udtryk.
 De resterednde sprites kan ses på appendiks \ref{apx:sprites}
 
-\textbf{Trawler}\\
+\textbf{Trawler - test II}\\
 Trawler-asseten er blevet lavet med generativ AI (specifikt ChatGPT) Vi har valgt at bruge generativ AI til at lave denne asset, da den er ret kompliceret, og vores grafiske og kreative enskaber må siges at være begrænsede. Trawleren skal være inde for 150px $\times$ 150px og den skal være i profil. Vi har derfor promptet modellen med: \textit{``lav en oliefedtet trawler i profil i stilen pixel-art, den skal være øst-gående. 150px $\times$ 150 px''}. Promptet gav faktisk første gang to meget brugbare assets, disse fortager vi en A/B test af for at finde ud af hvilken er bedst til vores formål. Denne A/B test foretog vi uformeldt i person, hvor vi spurgte 10 venner/bekendte hvilken de syntes bedst om til vores skraldeopsamlingsspil. Vi fortalte dem at trawleren skulle være ond og oliefedtet. Ud af de 10, mente 7 at trawler A var den bedste til formålet.
 
 \begin{figure}[H]
@@ -100,9 +164,18 @@ Trawler-asseten er blevet lavet med generativ AI (specifikt ChatGPT) Vi har valg
 Nu hvor trawleren blev valgt, skal den klargøres til at indsættes i spillet. Det betyder at den skal klippes ud af baggrunden som AI-modellen ikke ville fjerne. Dette gjorde vi ved Photopea, hvor vi benyttede Magic Wand-featuren. Dernæst spejlede vi den om y-aksen for at få begge retninger. 
 
 
+\todo[inline]{Skriv om sorte outlines}
+\textbf{Outlines}\\
+Vi har intentionelt designet alt det onde i spillet med sorte outlines. Dette er et stilistisk valg, som vi har truffet for at skabe en kontrast mellem det gode og det onde. Spilleren og båden har ikke nogen sort outline.
+
+Vi kunne have opnået en lignende effekt ved at give det gode og det onde forskellige farvepaletter, men det ville formentlig kræve flere assets for at tydeliggøre effekten.
+
+\todo[inline]{Skriv om spillets fortælling og et antropocentrisk perspektiv}
+
+\subsection*{Spillets navn}
+Spillet bærer navnet \textit{Project Plastic Waste}. Navnet er ikke blot beskrivende for spillets tema, men indeholder også en allitteration i de to P'er — \textit{Project} og \textit{Plastic} — hvilket gør navnet lettere at udtale og huske, da det falder naturligt i munden.
 
 
-\todo[inline]{Skriv om implementering af pixel-art (transform-overvejelser)}
 
 \todo[inline]{Skriv om SFX og musik}
 \subsection{SFX og musik}
