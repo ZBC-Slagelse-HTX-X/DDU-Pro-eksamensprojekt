@@ -14,7 +14,8 @@ mod items;
 #[derive(Clone, Copy, Default, Eq, PartialEq, Debug, Hash, States)]
 enum GameState {
     #[default]
-    Splash,
+    Splash1,
+    Splash2,
     Menu,
     Game,
 }

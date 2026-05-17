@@ -5,19 +5,18 @@ pub struct PlayerAvatar;
 
 
 // ######## AI
-fn wave_motion (
+fn wave_motion(
     time: Res<Time>,
-    mut player_query: Query<&mut crate::movement::Velocity, With<crate::player::PlayerAvatar>>,
+    mut player_query: Query<&mut Transform, With<crate::player::PlayerAvatar>>,
 ) {
     let t = time.elapsed_secs();
-    const RADIUS: f32 = 5.0;
+    let dt = time.delta_secs();
+    const FORCE: f32 = 10.0;
     const SPEED: f32 = 0.25;
 
-    for mut velocity in player_query.iter_mut() {
-        velocity.0 += Vec2::new(
-            -(t * SPEED).sin() * RADIUS * SPEED,
-            (t * SPEED).cos() * RADIUS * SPEED,
-        );
+    for mut transform in player_query.iter_mut() {
+        transform.translation.x += -(t * SPEED).sin() * FORCE * dt;
+        transform.translation.y += (t * SPEED).cos() * FORCE * dt;
     }
 }
 // ########
@@ -59,7 +58,7 @@ pub fn spawn_player(
 
 pub fn player_movement_plugin(app: &mut App) {
     app
-        .add_systems(Update, (change_player_acceleration, change_player_velocity, wave_motion, update_player_position).run_if(in_state(crate::GameState::Game)));
+        .add_systems(Update, (change_player_acceleration, change_player_velocity, wave_motion, update_player_position).chain().run_if(in_state(crate::GameState::Game)));
 }
 
 pub fn change_player_acceleration (

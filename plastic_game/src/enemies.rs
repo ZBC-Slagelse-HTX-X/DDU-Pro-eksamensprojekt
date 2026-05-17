@@ -291,7 +291,7 @@ fn monster_hunt (
     player_query: Single<&Transform, With<crate::player::PlayerAvatar>>,
     mut monster_query: Query<(&Transform, &mut crate::movement::Velocity), With<Slimey>>
 ) {
-    const SPEED: f32 = 18.;
+    const SPEED: f32 = 30.;
 
     for (transform, mut velocity) in monster_query.iter_mut() {
         let direction_vector = (player_query.translation.truncate() - transform.translation.truncate()).normalize();
@@ -467,11 +467,15 @@ fn trawler_lifetime(
     mut commands: Commands,
     time: Res<Time>,
     mut trawlers: Query<(Entity, &mut TrawlerLifetime)>,
+    trawler_sfx: Query<Entity, With<crate::music::TrawlerSfx>>,
 ) {
     for (entity, mut lifetime) in trawlers.iter_mut() {
         lifetime.0.tick(time.delta());
         if lifetime.0.just_finished() {
             commands.entity(entity).despawn();
+                for sfx_entity in trawler_sfx.iter() {
+                    commands.entity(sfx_entity).despawn();
+                }
         }
     }
 }
@@ -604,7 +608,7 @@ fn confirm_hit(
 
                 if slimey.is_some() {
                     let grunt = if rand::random::<bool>() {
-                        "music/grunt.mp3"
+                        "music/grunt1.mp3"
                     } else {
                         "music/grunt2.mp3"
                     };

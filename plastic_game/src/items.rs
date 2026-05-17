@@ -83,6 +83,16 @@ impl Default for Points {
     }
 }
 
+pub fn victory_score(
+    waves: Res<crate::enemies::Wave>,
+    points: Res<Points>,
+    remaining_trash: Res<crate::enemies::RemainingTrash>,
+    remaining_trawlers: Res<crate::enemies::RemainingTrawlers>,
+) {
+    if waves.0 == 15 {
+        println!("You win, champ! Your GRAND TOTAL is: {}", points.0);
+    }
+}
 
 pub fn rotate_scoop(
     keyboard_input: Res<ButtonInput<KeyCode>>,
@@ -178,3 +188,4 @@ fn show_aim_visibility(
 ) {
     **visibility = Visibility::Visible; // The aim will be invisible upon leaving shooting mode
 }
+
