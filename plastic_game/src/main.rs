@@ -5,6 +5,7 @@ mod enemies;
 mod player;
 mod movement;
 mod aim;
+mod music;
 mod splash_screen;
 mod pixel_grid;
 mod pixel_grid_copy;
@@ -26,6 +27,7 @@ fn main() {
         .init_state::<GameState>()
         .add_systems(Startup, pixel_grid_copy::setup_camera)
         .add_plugins(splash_screen::splash_plugin)
+        .add_plugins(music::sounds)
         .add_systems(OnEnter(GameState::Game), player::spawn_player)
         .add_plugins(player::player_movement_plugin)
         .add_plugins(movement::wrap_non_wrap)

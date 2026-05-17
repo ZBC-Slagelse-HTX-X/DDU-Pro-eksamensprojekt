@@ -1,21 +1,61 @@
-\paragraph{\textit{Bevy}}
-\todo[inline]{Uddyb om Bevy, ECS-paradigmet, herunder velegnethed og anvendelse, og spilmotor}
+\paragraph{Bevy} \label{par:bevy}
+\textit{Bevy} er en spilmotor, bygget i Rust, se \autoref{par:rust}, og distribueres som en Rust-package.
 
-\paragraph{Rust}
-\todo[inline]{Skriv om fordelene ved Rust omend det ikke er ``software''}
+\begin{listing}[H]
+\begin{minted}{rust}
+use bevy::prelude::*;
+\end{minted}
+\caption{Her ses Bevy-biblioteket blive importeret, fra kodens \mintinline{bash}{main.rs}-fil.}
+\end{listing}
+
+En af fordelene ved Bevy, udover at det er en moderne spilmotor, er, at Bevy er fuldstændig datadrevet, hvilket også er meget effektivt og simpelt. Spilmotoren er i skrivende stund uden en game editor, og derfor skal alting kodes direkte. Det er imidlertid ikke en ulempe, da begge gruppemedlemmer, herunder undertegnede, i forvejen har programmeringskompetencer. Såfremt udviklingsteamet var større, og især, hvis der er ikke-programmører på teamet, vil det være et problem. En game editor er dog i Bevys pipeline.
+
+Desuden er Bevy en relativt ny spilmotor, der udkom i 2020\footfullcite{bevy_birthday}, hvilket nødvendigvis indebærer, at spilmotoren ikke er ligeså moden som sine alternativer. På Bevys hjemmeside, beskriver udvikleren selv, at de fraråder større eller kommercielle projekter at anvende Bevy til fordel for andre motorer, da spilmotorens syntaks ivrigt ændres (de har dog manualer til at oversætte forældet kode, så man kan migrere sit projekt til en ny version), hvorfor ens spil kan gå i stykker, hvis man migrerer uden at tage de nødvendige forbehold, se \autoref{fig:stabilitywarning}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{assets/stabilitywarning.png}
+\caption{Viser Bevys ``stability warning'' under deres ``quick start''-side. Siden kan findes på \url{https://bevy.org/learn/quick-start/introduction/}.}\label{fig:stabilitywarning}
+\end{figure}
+
+Selve Bevys projekter indeholder en MIT-licens og en Apache 2.0-licens. Begge licenser tillader, at man gør sin software privatejet. Det er vigtigt, idet nogle open source-software har såkaldte copyleft-licenser. Det er kutyme, at kommerciel software er privatejet, da man i så fald kan beskytte koden, der er grundlag for ens unikke spil, og derfor indtjeningsgrundlag.
+
+\subparagraph{ECS-paradigmet} \label{subpar:ecs}
+Bevy er som tidligere beskrevet datadrevet. De tre primære byggedele er henholdsvis entiteter, kommandoer og systemer. Entiteter er det, som eksisterer i ens program. De udgøres af komponenter, der kan indeholde en given data eller information. Kommandoer er kontaktfladen til entiteterne, med kommandoer kan vi oprette en ny entitet eller fjerne entiteter. Systemer kan kalde kommandoer, kan lede efter bestemte entiteter og foretage ændringer på bestemte komponenter. Systemerne kan eksekveres betinget. Eksempelvis kan vi have et system, der kører for hver ny frame og opfanger input, og hvis dette input matcher et ønsket input, gør systemet noget, eksempelvis modificere spillerens bevægelseskomponent, så denne rykkes i en bestemt retning.
+
+Komponenterne er Rust-structs, ikke-indbyggede datatyper. Det kan være simple tuple-structs, hvor at structen bare er en container for en anden datatype, måske en mere primitiv datatype. På listing \autoref{lst:component_example} ses eksempelvis, vores \texttt{Velocity}-komponent, således at denne kan indgå som del af en entitet, vi således kan anvende et system på.
+
+\begin{listing}[H]
+\begin{minted}{rust}
+#[derive(Component)]
+pub struct Velocity(pub Vec2);
+\end{minted}
+\caption{Viser \texttt{Velocity}-komponentet bliver oprettet.}\label{lst:component_example}
+\end{listing}
+
+I Bevy er der også mange features, eksempelvis resurser. Resurser er universel data, der kan tilgås for sig selv. I vores projekt har vi en resurse, der holder styr på mængden af bølger, der er tilbage, eller mængden af point, spilleren har. Disse kan også hentes af systemer. Indbyggede resurser er eksempelvis også tid; der  bruges, når vi skal bruge delta-tid i systemer.
+
+Alternative spilmotorer, der havde været værd af betragte i kommercielle sammenhæng havde været Unity eller Unreal Engine. Godot har vi ikke nogle erfaringer med, så det havde været en byrde.
+
+\paragraph{Rust}\label{par:rust}
+Rust er programmeringssproget, som projektet her er skrevet i. Vi har valgt dette programmeringssprog, da det er et hurtigt, low-level sprog, vi har erfaring med fra programmering. Rust har desuden en række andre fordele, eksempelvis sin borrow checker, der sikrer data-integritet og data-sikkerhed samt en compiler, der håndhæver god kodeskik. \texttt{cargo}-suiten gør det nemt at kompilere binærer, og Rust har også et rigt økosystemer med pakker, der kunne være relvante for vores projekt, eksempelvis \texttt{serde} og \texttt{dirs}. Alternativt kunne vi have brugt Python, da vi har erfaring hermed, men det er mere et script-sprog og fortolker koden i realtid, hvilket ville gøre det svære i distributionsfasen, men er fuldstændig ladsiggørligt.
+
+Havde vi anvendt Unity, havde vi skrevet i C\#, men det har vi ikke erfaring med, udover tidligere projekter i Unity.
 
 \paragraph{Photopea}
-\todo[inline]{Skriv om Photopea og anvendelse heraf}
 Photopea er en webapp, som forsøger at replikere det meget succefulde og kendte Photoshop. Vi valgte at benytte Photopea, da vi tidligere har erfaring med Photoshop, men det er desvære ikke kompatibelt med vores nuværende styresystem. Photopea er som førnævnt en webapp, hvilket også kommer med signe begrænsninger, herunder performance-begrænsninger. 
 
 Vi har benyttet Photopea til at producere alle Sprites til spillet.
 
-
 \paragraph{Doom Emacs}
-\todo[inline]{Skriv om Doom Emacs, og anvendelse}
+Til primært at skrive koden til programmet er Doom Emacs anvendt, en modifikation af Emacs, som er et rigt tekstbehandlingsprogram med så mange pakker, udvidelser, at der eksisterer en joke om Emacs, at det er ``a great operating system, lacking only a decent editor''. Doom Emacs har en masse præ-definerede genvejstaster, præ-definerede pakker og kode-highlighting, der muliggør et godt workflow. Alternativt kunne vi have brugt Microsoft Visual Studio Code, der er industrinorm. En af de helt store fordele ved VsCode er den tætte indbyggede AI-integration; man kan formentlig opnå noget lignende i Emacs.
 
 \paragraph{GitHub}
-\todo[inline]{Skriv om GitHub repositories}
 GitHub er en gratis webbaseret platform, som kan gemme Git-depoter. Git er et versionshåndteringsværktøj, som er meget udbredt i programmeringsverdenen. Med Git kan vi gemme forskellige versioner af vores kode, følge ændringer over tid og samarbejde om det samme projekt uden at overskrive hinandens arbejde. Dette gør det lettere at udvikle større programmer (som dette), da man altid kan gå tilbage til tidligere versioner, hvis der opstår fejl. GitHub fungerer samtidig som en online backup og giver mulighed for at dele projekter med andre udviklere samt udgive den endelige version af spillet så det let kan nedhentes.
 
 GitHub tilbyder også andre værktøjer end Git. Vi har også benyttet GitHubs SCRUM-funktion samt udarbejdet et Roadmap.
+
+\paragraph{\LaTeX}\label{sec:latexsoftware}
+\LaTeX\ er et markupsprog til tekstformatering, hvilket indebær at man skrive en separat kodefil, som sidenhen kan kompileres til eksempelvis en PDF-fil, der kan distribueres. Dette er i stor modstrid til normal Word processing, hvor man skriver direkte i Rich Text. Det indebærer, at man selv manuelt skal ændre på størrelsen af tekst, dens udseende, mens man i \LaTeX\ bare angiver sin teksts struktur og sidenhen kan ændre reglerne for, hvordan det skal kompilleres. Det gør, at ens resultat bliver ordentligt og strømlinet.
+
+Det er klart, at der er en afvejning her. Eksempelvis kan du risikere, at dokumentet ikke kompileres, hvis du har lavet en kodefejl; man risikerer debugging. Men i takt med, at ens opgave vokser, bliver det relativt nemmere at administrere i latex, da al nummerering automatisk genereres, bibliografi håndteres automatisk osv. Alle ting som vil kræve manuel formatering med en Word Processor. Desuden er der selvfølgelig mange andre fordele som resultat af \LaTeX-økosystemet. Matematikbehandlingen alene er også en grund til, at mange foretrækker \LaTeX\ fremfor alternativer løsninger til fremstilling af rapporter. Af de grunde har vi også valgt at bruge det.

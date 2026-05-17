@@ -143,6 +143,7 @@ fn shooting(
     if !fired {
         return;
     }
+
     const PROJECTILE_PATH: &str = "sprites/bullet/projectile.png";
     const BULLET_SPEED: f32 = 200.; // Px s^-1
     const ARM_LENGTH: f32 = 20.; // Px
@@ -154,6 +155,7 @@ fn shooting(
     let bullet_origin = player_pos + direction*ARM_LENGTH;
     let angle = direction.to_angle(); // angle in radians from Vec2
     let rotation = Quat::from_rotation_z(angle + std::f32::consts::FRAC_PI_2);
+
     eprintln!("Shot from: {} at: {}", player_pos, target);
     commands.spawn((
         Bullet,
@@ -161,6 +163,10 @@ fn shooting(
         Transform::from_translation(bullet_origin.extend(Z_VALUE)).with_rotation(rotation),
         crate::movement::Velocity::from_vec(direction*BULLET_SPEED),
         crate::pixel_grid::PIXEL_PERFECT_LAYERS,
+    ));
+    commands.spawn((
+        AudioPlayer::new(asset_server.load("music/shot.mp3")),
+        PlaybackSettings::DESPAWN,
     ));
 }
 

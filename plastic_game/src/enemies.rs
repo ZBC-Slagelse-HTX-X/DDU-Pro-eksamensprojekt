@@ -2,6 +2,8 @@ use std::time::Duration;
 use bevy::prelude::*;
 use rand::prelude::*;
 
+use bevy::audio::Volume;
+ 
 use std::collections::HashMap;
 
 #[derive(Resource)]
@@ -84,11 +86,11 @@ pub fn trash_handler(app: &mut App) {
         .init_resource::<RemainingTrawlers>()
         .add_message::<SpawnTrashPiece>()
         .add_message::<SpawnTrawler>()
-        .add_systems(Startup, setup_pullers)
+        .add_systems(Startup, spawn_pullers)
         .add_systems(Update, (spawn_trawler, trawler_movement, spawn_plastic).chain())
         .add_systems(Update, (change_trash_acceleration, change_trash_velocity, change_trash_position).chain())
         .add_systems(Update, (monster_hunt, change_monster_position).chain())
-        .add_systems(Update, (wave_spawner, detect_and_merge_clusters, confirm_for_kill, slime_attack, bury_player, confirm_hit));
+        .add_systems(Update, (wave_spawner, detect_and_merge_clusters, confirm_for_kill, slime_attack, bury_player, confirm_hit, trawler_lifetime));
 }
 
 #[derive(Resource)]
@@ -99,6 +101,7 @@ impl Default for RemainingTrawlers {
         Self (1)
     }
 }
+
 fn wave_spawner(
     mut trash_writer: MessageWriter<SpawnTrashPiece>,
     mut trawler_writer: MessageWriter<SpawnTrawler>,
@@ -109,28 +112,26 @@ fn wave_spawner(
     time: Res<Time>
 ) {
     const FINAL_WAVE: u32 = 15;
+    const SPEED: f32 = 30.;
 
     timer.0.tick(time.delta());
-
     if wave_counter.0 <= FINAL_WAVE && remaining_trash.0 > 0 && timer.0.just_finished() {
-        let (spawn_pos, initial_velocity) = match wave_counter.0 {
-            _ => {
-                // Left wall --- more to come
-                let north_western_corner = Vec2::new(-(crate::pixel_grid::RES_WIDTH as f32 /2.), crate::pixel_grid::RES_HEIGHT as f32 /2.);
-                let position = |numero: u32| -> Vec2 {
-                    north_western_corner + numero as f32 * (crate::pixel_grid::RES_HEIGHT as f32 /(wave_counter.0 as f32 *50.)) * Vec2::NEG_Y
-                };
-                (position(remaining_trash.0 - 1), Vec2::X * 2.)
-            },
+        let mut rng = rand::rng();
+
+        let north_western_corner = Vec2::new(-(crate::pixel_grid::RES_WIDTH as f32 / 2.), crate::pixel_grid::RES_HEIGHT as f32 / 2.);
+        let position = |numero: u32| -> Vec2 {
+            north_western_corner + numero as f32 * (crate::pixel_grid::RES_HEIGHT as f32 / (wave_counter.0 as f32 * 50.)) * Vec2::NEG_Y
         };
 
-        trash_writer.write(SpawnTrashPiece{spawn_pos, initial_velocity});
-        remaining_trash.0 -= 1;
+        let angle = rng.random_range(0.0..std::f32::consts::TAU);
+        let initial_velocity = Vec2::new(angle.cos(), angle.sin()) * SPEED;
 
+        trash_writer.write(SpawnTrashPiece { spawn_pos: position(remaining_trash.0 - 1), initial_velocity });
+        remaining_trash.0 -= 1;
         if remaining_trash.0 == 0 {
             wave_counter.0 += 1;
-            remaining_trash.0 = wave_counter.0*20;
-            timer.0.set_duration(Duration::from_secs_f32(0.5/wave_counter.0 as f32));
+            remaining_trash.0 = wave_counter.0 * 20;
+            timer.0.set_duration(Duration::from_secs_f32(0.5 / wave_counter.0 as f32));
             if wave_counter.0 == 10 && remaining_trawlers.0 > 0 {
                 trawler_writer.write(SpawnTrawler);
                 remaining_trawlers.0 -= 1;
@@ -139,15 +140,35 @@ fn wave_spawner(
     }
 }
 
-fn setup_pullers(
+pub fn spawn_pullers(
     mut commands: Commands,
 ) {
-    const PULLER_MASS: f32 = 1e13; // kg
-    commands.spawn((
-        Puller,
-        Transform::from_xyz(240.,270., 0.),
-        Mass(PULLER_MASS)
-    ));
+    const PULLER_MASS: f32 = 1e6;
+
+    let positions: &[(f32, f32)] = &[
+        // Spread across the map with decent breathing room
+        (-180., 90.),
+        (180., 90.),
+        (-180., -90.),
+        (180., -90.),
+        // Mid ring
+        (-90., 40.),
+        (90., 40.),
+        (-90., -40.),
+        (90., -40.),
+        // Center tension
+        (0., 0.),
+        (-40., 70.),
+        (40., -70.),
+    ];
+
+    for &(x, y) in positions {
+        commands.spawn((
+            Puller,
+            Mass(PULLER_MASS),
+            Transform::from_xyz(x, y, 0.),
+        ));
+    }
 }
 
 #[derive(Component)]
@@ -170,8 +191,8 @@ fn spawn_plastic(
     const Z_VALUE: f32 = 3.;
 
     const WANTED_PERCENTAGE_OF_BOTTLES: u32 = 50;
-    const WANTED_PERCENTAGE_OF_CANS: u32 = 35;
-    const WANTED_PERCENTAGE_OF_WATERDUNKS: u32 = 15;
+    const WANTED_PERCENTAGE_OF_CANS: u32 = 40;
+    const WANTED_PERCENTAGE_OF_WATERDUNKS: u32 = 10;
 
     const BOTTLE_UPPER: u32 = WANTED_PERCENTAGE_OF_CANS + WANTED_PERCENTAGE_OF_BOTTLES;
     assert_eq!(
@@ -225,10 +246,9 @@ fn gravitational_acceleration(mass_kg: f32, pulled_pos: Vec3, puller_pos: Vec3) 
     let puller_pos = puller_pos.truncate();
     let difference_vector = puller_pos - pulled_pos;
     let direction_vector = difference_vector.normalize_or_zero();
-    let distance_squared = difference_vector.length_squared(); // px**2
-    let acceleration = crate::movement::Acceleration(G * mass_kg / distance_squared * direction_vector);
+    let distance = difference_vector.length_squared().max(400.); // 20px min distance
+    let acceleration = crate::movement::Acceleration(G * mass_kg / distance * direction_vector);
     acceleration
-
 }
 
 fn change_trash_acceleration (
@@ -248,11 +268,11 @@ fn change_trash_velocity (
     mut trash_pieces: Query<(&crate::movement::Acceleration, &mut crate::movement::Velocity), With<TrashPiece>>,
     time: Res<Time>
 ) {
-    const THERMAL_SPEED: f32 = 10.;
+    const TERMINAL_SPEED: f32 = 10.;
     for (acceleration, mut velocity) in &mut trash_pieces {
         let change_in_velocity = acceleration.0 * time.delta_secs();
         velocity.0 += change_in_velocity;
-        velocity.0 = velocity.0.clamp_length_max(THERMAL_SPEED);
+        velocity.0 = velocity.0.clamp_length_max(TERMINAL_SPEED);
 
     }
 }
@@ -289,12 +309,25 @@ fn change_monster_position (
     }
 }
 
-fn confirm_for_kill (
+fn confirm_for_kill(
     mut commands: Commands,
-    slime_query: Query<(Entity, &Health), With<Monster>>
+    asset_server: Res<AssetServer>,
+    mut points: ResMut<crate::items::Points>,
+    monster_query: Query<(Entity, &Health, Option<&Trawler>), With<Monster>>,
+    trawler_sfx: Query<Entity, With<crate::music::TrawlerSfx>>,
 ) {
-    for (entity, health) in slime_query {
+    for (entity, health, trawler) in monster_query.iter() {
         if health.0 <= 0. {
+            if trawler.is_some() {
+                for sfx_entity in trawler_sfx.iter() {
+                    commands.entity(sfx_entity).despawn();
+                }
+                commands.spawn((
+                    AudioPlayer::new(asset_server.load("music/explosion.mp3")),
+                    PlaybackSettings::DESPAWN,
+                ));
+                points.0 += 1000;
+            }
             commands.entity(entity).despawn();
         }
     }
@@ -424,8 +457,24 @@ fn slime_attack(
 #[derive(Component)]
 pub struct Trawler;
 
+#[derive(Component)]
+struct TrawlerLifetime(Timer);
+
 #[derive(Message)]
 pub struct SpawnTrawler;
+
+fn trawler_lifetime(
+    mut commands: Commands,
+    time: Res<Time>,
+    mut trawlers: Query<(Entity, &mut TrawlerLifetime)>,
+) {
+    for (entity, mut lifetime) in trawlers.iter_mut() {
+        lifetime.0.tick(time.delta());
+        if lifetime.0.just_finished() {
+            commands.entity(entity).despawn();
+        }
+    }
+}
 
 fn spawn_trawler(
     mut events: MessageReader<SpawnTrawler>,
@@ -444,6 +493,7 @@ fn spawn_trawler(
     commands.spawn((
         Monster,
         Trawler,
+        TrawlerLifetime(Timer::from_seconds(10.0, TimerMode::Once)),
         Health::trawler(),
         TrawlerMovement::default(),
         Sprite::from_image(asset_server.load(TRAWLER_PATH)),
@@ -451,6 +501,12 @@ fn spawn_trawler(
         crate::movement::NonWrappable,
         Transform::from_translation(Vec3::new(x, y, 0.5)),
         crate::movement::Velocity::default(),
+    ));
+
+    commands.spawn((
+        AudioPlayer::new(asset_server.load("music/steamboat.wav")),
+        PlaybackSettings::LOOP,
+        crate::music::TrawlerSfx
     ));
 }
 
@@ -473,12 +529,14 @@ impl Default for TrawlerMovement {
 fn trawler_movement(
     mut query: Query<(&mut Transform, &mut TrawlerMovement), With<Trawler>>,
     time: Res<Time>,
-    mut writer: MessageWriter<SpawnTrashPiece>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
 ) {
     let half_width  = crate::pixel_grid_copy::RES_WIDTH as f32 / 2.0;
     let half_height = crate::pixel_grid_copy::RES_HEIGHT as f32 / 2.0;
     const DESCENT_SPEED: f32 = 20.0;
     const FREQUENCY: f32 = 0.5; // full sweeps per second — lower = slower
+    const MONSTER_PATH: &str = "sprites/green_monster/right_front.png";
 
     for (mut transform, mut movement) in query.iter_mut() {
         movement.time_elapsed += time.delta_secs();
@@ -494,10 +552,17 @@ fn trawler_movement(
         }
 
         if movement.timer.just_finished() {
-            writer.write(SpawnTrashPiece {
-                spawn_pos: transform.translation.truncate(),
-                initial_velocity: Vec2::NEG_Y * 5.0,
-            });
+            commands.spawn((
+                Monster,
+                Health::monster(),
+                SlimeAttackTimer::default(),
+                Slimey,
+                Sprite::from_image(asset_server.load(MONSTER_PATH)),
+                crate::pixel_grid::PIXEL_PERFECT_LAYERS,
+                crate::movement::NonWrappable,
+                Transform::from_translation(transform.translation.truncate().extend(1.5)),
+                crate::movement::Velocity::default()
+            ));
         }
     }
 }
@@ -515,30 +580,54 @@ fn bury_player(
 }
 
 fn confirm_hit(
-    mut monster_query: Query<(&Transform, &mut Health, &Sprite), With<Monster>>,
+    mut monster_query: Query<(&Transform, &mut Health, &Sprite, Option<&Slimey>, Option<&Trawler>), With<Monster>>,
     bullet_query: Query<(Entity, &Transform), With<crate::aim::Bullet>>,
     images: Res<Assets<Image>>,
+    asset_server: Res<AssetServer>,
     mut commands: Commands,
 ) {
     const SHOT_DAMAGE: f32 = 25.;
-
-    for (monster_transform, mut health, sprite) in monster_query.iter_mut() {
+    for (monster_transform, mut health, sprite, slimey, trawler) in monster_query.iter_mut() {
         let half_extent = images
             .get(&sprite.image)
             .map(|img| img.size().as_vec2() / 2.0)
             .unwrap_or(Vec2::splat(8.0));
-
         let center = monster_transform.translation.truncate();
         let min = center - half_extent;
         let max = center + half_extent;
-
         for (bullet_entity, bullet_transform) in bullet_query.iter() {
             let bullet_pos = bullet_transform.translation.truncate();
-
             if bullet_pos.x >= min.x && bullet_pos.x <= max.x
             && bullet_pos.y >= min.y && bullet_pos.y <= max.y {
                 health.0 -= SHOT_DAMAGE;
                 commands.entity(bullet_entity).despawn();
+
+                if slimey.is_some() {
+                    let grunt = if rand::random::<bool>() {
+                        "music/grunt.mp3"
+                    } else {
+                        "music/grunt2.mp3"
+                    };
+                    commands.spawn((
+                        AudioPlayer::new(asset_server.load(grunt)),
+                        PlaybackSettings {
+                            mode: bevy::audio::PlaybackMode::Despawn,
+                            volume: Volume::Linear(rand::random::<f32>() * 0.4 + 0.8),
+                            speed: rand::random::<f32>() * 0.4 + 0.8,
+                            ..default()
+                        },
+                    ));
+                } else if trawler.is_some() {
+                    let ricochet = if rand::random::<bool>() {
+                        "music/ricochet1.mp3"
+                    } else {
+                        "music/ricochet2.mp3"
+                    };
+                    commands.spawn((
+                        AudioPlayer::new(asset_server.load(ricochet)),
+                        PlaybackSettings::DESPAWN,
+                    ));
+                }
             }
         }
     }

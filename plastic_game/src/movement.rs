@@ -93,4 +93,3 @@ pub fn clamp_to_map(
         transform.translation.y = transform.translation.y.clamp(-half_height + half_h, half_height - half_h);
     }
 }
-
