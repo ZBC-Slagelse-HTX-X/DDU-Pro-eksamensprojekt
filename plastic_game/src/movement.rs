@@ -40,6 +40,27 @@ pub enum InputMode {
     Controller
 }
 
+#[derive(Resource, Default, PartialEq, Eq)]
+pub enum HandMode {
+    #[default]
+    RightHand,
+    LeftHand
+}
+
+pub fn handle_hand_mode_trigger(
+    mut hand_mode: ResMut<HandMode>,
+    gamepad: Option<Single<&Gamepad>>,
+) {
+    let Some(gamepad) = gamepad else { return };
+
+    if gamepad.just_pressed(GamepadButton::LeftTrigger2) {
+        *hand_mode = match *hand_mode {
+            HandMode::RightHand => HandMode::LeftHand,
+            HandMode::LeftHand => HandMode::RightHand,
+        };
+    }
+}
+
 pub fn change_inputmode(
     mut mode: ResMut<InputMode>,
     gamepad: Option<Single<&Gamepad>>,

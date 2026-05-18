@@ -1,8 +1,7 @@
-\todo[inline]{Beskriv antagelse om at spillets aktiver er propritære (og ikke open-source, som de faktisk er nu grundet nemhedens skyld)}
-
-\todo[inline]{Prisovervejelser}
+\subsection{Overvejelser om ophavsret}
+Det er klart, at såfremt spillet ikke var skolerelateret, ville kodebasen og alle assets skulle være privatejet; da kun er en emulering af dette, har vi valgt bare at offentliggøre projektet for frit skue på GitHub, således at kodebasen let kan tilgås; således vil enhver aktør kunne tilgå og nappe koden, men det er selvfølgelig mindre væsentlig under de reele omstændigheder. Imidlertid har vi ikke anvendt software, der skulle umuliggøre dette, og vi har berørt det tidligere i rapporten, herunder kigget på MIT og Apache 2.0-licensernes betydning og royalty-free musik.
 \subsection{Prisovervejelser}
-Hvis vores spil i fremtiden skulle udgives, er det essentielt at vi overvejer en pris. For at vi kan gøre det, vurderer vi at det er hensigtsmæssigt at vi sammenligner vores spil med andre lignende uafhængingt producerede spil på markdet (specifikt på Steam)
+Hvis vores spil i fremtiden skulle udgives, er det essentielt at vi overvejer en pris. For at vi kan gøre det, vurderer vi at det er hensigtsmæssigt at vi sammenligner vores spil med andre lignende uafhængigt-producerede spil på markedet (specifikt på Steam)
 
 Tabel \ref{tab:priser} 
 viser en oversigt over udvalgte sammenlignelige titler og deres nuværende priser.
@@ -23,24 +22,18 @@ viser en oversigt over udvalgte sammenlignelige titler og deres nuværende prise
 \label{tab:priser}
 \end{table}
 
-De spil vi har valgt at indrage til sammenligningen, er alle indie-spil (uafhængigt producerede spil) i pixel-art stilen. De spil vi sammenligner os med ligger alle i prislejet \$9,99 --\$19,99.
+De spil vi har valgt at inddrage til sammenligningen, er alle indie-spil (uafhængigt producerede spil) i pixel-art stilen. De spil vi sammenligner os med ligger alle i prislejet \$9,99 --\$19,99.
 
-Da vores spil er et skoleprojekt i af begrænset omfang og med begrænsede midler, ville det derfor være urimeligt at udgive og prisætte et semi-færdigt spil på niveau med spil som er udviklet af et professionelt spiludviklingsstudie over flere år. Så vi vurderer at når spillet udgives i Early Accees, skal det derfor være gratis, indtil det udkommer i full release. Full release-versionen bør prisættes i prislejet \$5--\$8
+Da vores spil er et skoleprojekt i af begrænset omfang og med begrænsede midler, ville det derfor være urimeligt at udgive og prissætte et semi-færdigt spil på niveau med spil som er udviklet af et professionelt spiludviklingsstudie over flere år. Så vi vurderer at når spillet udgives i Early Accees, skal det derfor være gratis, indtil det udkommer i full release. Full release-versionen bør prisættes i prislejet \$5--\$8
 
 
 \subsection*{Regional prissættelse}
-En væsentlig overvæjelse om prisættelse i forbindelse med udgivelsen af spillet er regional prisættelse, texitit{regional pricing\footfullcite{reg_price}}. Regional prissættelse betyder, at spillet sælges til forskellige priser afhængigt af, hvilket land køberen befinder sig i. Dette er en udbredt praksis på Steam, hvor Valve selv anbefaler, at udviklere tilpasser deres priser til de lokale markeder. Steam er ikke den eneste Spil-side som benytter sig at regional prisættelse sider som Epic Games og EA  gør det samme.
+En væsentlig overvejelse om prissættelse i forbindelse med udgivelsen af spillet er regional prissættelse, texitit{regional pricing\footfullcite{reg_price}}. Regional prissættelse betyder, at spillet sælges til forskellige priser afhængigt af, hvilket land køberen befinder sig i. Dette er en udbredt praksis på Steam, hvor Valve selv anbefaler, at udviklere tilpasser deres priser til de lokale markeder. Steam er ikke den eneste Spil-side som benytter sig at regional prissættelse sider som Epic Games og EA  gør det samme.
 
 Rationalet bag \textit{regional pricing} er, at købekraften varierer betydeligt fra land til 
-land. En pris på f.eks. \$7 for et spil, kan være ubetydelig for en køber i Vesteuropa eller Nordamerika, mens den samme pris kan være uoverkommelig dyry for en køber i eksempelvis Brasilien eller Indien. Ved at tilpasse prisen til det lokale marked kan man derfor nå en betydeligt større spillerbase, uden at det nødvendigvis går ud over indtjeningen på de primære 
-markeder.
+land. En pris på f.eks. \$7 for et spil, kan være ubetydelig for en køber i Vesteuropa eller Nordamerika, mens den samme pris kan være uoverkommeligt dyrt for en køber i eksempelvis Brasilien eller Indien. Ved at tilpasse prisen til det lokale marked kan man derfor nå en betydeligt større spillerbase, uden at det nødvendigvis går ud over indtjeningen på de primære markeder.
 
-Steam tilbyder udviklere et værktøj til at fastsætte regionale priser, hvor Valve 
-foreslår omregningsfaktorer baseret på lokale markedsforhold. Da vores spil i Early 
-Access-fasen udgives gratis, er regional prissættelse først relevant ved en eventuel 
-full release. Vi vurderer, at det ved full release vil være hensigtsmæssigt at følge 
-Valves anbefalede regionale priser, da det maksimerer spillets tilgængelighed globalt 
-og dermed potentielt øger spillerbasens størrelse.\footfullcite{reg_price_steam}
+Steam tilbyder udviklere et værktøj til at fastsætte regionale priser, hvor Valve foreslår omregningsfaktorer baseret på lokale markedsforhold. Da vores spil i Early Access-fasen udgives gratis, er regional prissættelse først relevant ved en eventuel full release. Vi vurderer, at det ved full release vil være hensigtsmæssigt at følge Valves anbefalede regionale priser, da det maksimerer spillets tilgængelighed globalt og dermed potentielt øger spillerbasens størrelse.\footfullcite{reg_price_steam}
 
 
 \subsection{Platformovervejelser}
@@ -100,11 +93,7 @@ Sammenlagt sider Windows på $93,47\%$ af hele Steams brugerbase. OSX (Apple) $2
 
 Det vil sige at for at ramme flest muligt bør vi understøtte som minimum Windows 10 og Windows 11.
 
-
-\todo[inline]{Fremtidige opdateringer}
-
-\todo[inline]{Early Access-development (versus ``gammeldags'' udvikling [golden edition])}
-\subsection{Udgivningsstadie}
+\subsection{Udgivningsstadie}\label{sec:udviklingsstadie}
 Spilvirksomheder udgiver sjældent et spil 100\% første gang. Man taler ofte om ``The software release life cycle'' — denne beskriver udviklings-, test- og distribueringsfaserne af et stykke software.\footfullcite{softwareRelease}
 
 \begin{figure}[H]
@@ -149,7 +138,7 @@ Herefter overgår produktet til udgivnings facen (Release period)
 \end{enumerate}
 
 
-Skulle \textbf{SPIL NAVN} udgives kommercielt, ville Early Access-modellen være oplagt for os, da spillet stadig har ufuldkomndne features og ville kunne drage fordel af løbende brugerfeedback og økonomisk støtte i en tidlig fase.
+Skulle \textbf{Project Plastic Waste} udgives kommercielt, ville Early Access-modellen være oplagt for os, da spillet stadig har ufuldkomndne features og ville kunne drage fordel af løbende brugerfeedback og økonomisk støtte i en tidlig fase.
 
 
 

@@ -65,7 +65,8 @@ pub fn change_player_acceleration (
     mut current_acceleration: Single<&mut crate::movement::Acceleration, (With<PlayerAvatar>, Without<crate::aim::PlayerAim>)>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
     mode: Res<crate::movement::InputMode>,
-    gamepad: Option<Single<&Gamepad>>
+    gamepad: Option<Single<&Gamepad>>,
+    hand_mode: Res<crate::movement::HandMode>
 ) {
     const SPEED_OF_ACCELERATION: f32 = 3000.;
     let mut weighed_direction: Vec2 = Vec2::ZERO;
@@ -86,19 +87,25 @@ pub fn change_player_acceleration (
             }
         },
         crate::movement::InputMode::Controller => {
-            // Uses left stick for movement
             if let Some(gamepad) = gamepad {
                 const THRESHOLD: f32 = 0.025;
                 const SENSITIVITY: f32 = 0.5;
-                let current_stick_x = gamepad.get(GamepadAxis::LeftStickX).unwrap();
-                let current_stick_y = gamepad.get(GamepadAxis::LeftStickY).unwrap();
+                
+                let (stick_x, stick_y) = match *hand_mode {
+                    crate::movement::HandMode::LeftHand => (GamepadAxis::RightStickX, GamepadAxis::RightStickY),
+                    crate::movement::HandMode::RightHand  => (GamepadAxis::LeftStickX,  GamepadAxis::LeftStickY),
+                };
+                
+                let current_stick_x = gamepad.get(stick_x).unwrap();
+                let current_stick_y = gamepad.get(stick_y).unwrap();
+                
                 if current_stick_x.abs() > THRESHOLD {
                     weighed_direction.x += current_stick_x * SENSITIVITY;
                 }
                 if current_stick_y.abs() > THRESHOLD {
                     weighed_direction.y += current_stick_y * SENSITIVITY;
                 }
-            } 
+            }
         }
     }
     current_acceleration.0 = weighed_direction.clamp_length_max(1.0) * SPEED_OF_ACCELERATION;
@@ -124,7 +131,6 @@ pub fn change_player_velocity (
             current_velocity.0 += FRICTION * -direction_of_movement * time.delta_secs(); 
         }
     }
-
 }
 
 pub fn update_player_position(

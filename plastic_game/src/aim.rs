@@ -20,7 +20,8 @@ pub fn change_aim_acceleration (
     mut current_acceleration: Single<&mut crate::movement::Acceleration, (With<PlayerAim>, Without<crate::player::PlayerAvatar>)>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
     mode: Res<crate::movement::InputMode>,
-    gamepad: Option<Single<&Gamepad>>
+    gamepad: Option<Single<&Gamepad>>,
+    hand_mode: Res<crate::movement::HandMode>
 ) {
     const SPEED_OF_ACCELERATION: f32 = 3000.;
     let mut weighed_direction: Vec2 = Vec2::ZERO;
@@ -40,21 +41,27 @@ pub fn change_aim_acceleration (
             }
         },
         crate::movement::InputMode::Controller => {
-            // Uses right stick for aim
             if let Some(gamepad) = gamepad {
                 const THRESHOLD: f32 = 0.025;
                 const SENSITIVITY: f32 = 0.5;
-                let current_stick_x = gamepad.get(GamepadAxis::RightStickX).unwrap();
-                let current_stick_y = gamepad.get(GamepadAxis::RightStickY).unwrap();
+                
+                let (stick_x, stick_y) = match *hand_mode {
+                    crate::movement::HandMode::RightHand => (GamepadAxis::RightStickX, GamepadAxis::RightStickY),
+                    crate::movement::HandMode::LeftHand  => (GamepadAxis::LeftStickX,  GamepadAxis::LeftStickY),
+                };
+                
+                let current_stick_x = gamepad.get(stick_x).unwrap();
+                let current_stick_y = gamepad.get(stick_y).unwrap();
+                
                 if current_stick_x.abs() > THRESHOLD {
                     weighed_direction.x += current_stick_x * SENSITIVITY;
                 }
                 if current_stick_y.abs() > THRESHOLD {
                     weighed_direction.y += current_stick_y * SENSITIVITY;
                 }
-            } 
-        }
-    }
+            }
+        }  // <-- closes Controller arm
+    }      // <-- closes match *mode
     current_acceleration.0 = weighed_direction.clamp_length_max(1.0) * SPEED_OF_ACCELERATION;
 }
 

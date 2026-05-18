@@ -54,8 +54,6 @@
 \newpage
 \pagenumbering{arabic}
 
-
-
 \section*{Forord}
 \input{kapitler/forord.tex}
 \newpage
@@ -66,9 +64,12 @@
 \input{kapitler/indledning.tex}
 \newpage
 
-\todo[inline]{Kapitel: Problembeskrivelse}
+\section{Problembeskrivelse}
+\input{kapitler/problembeskrivelse.tex}
 
-\todo[inline]{Kapitel: Resume}
+\section{Resume}
+\input{kapitler/resume.tex}
+\newpage
 
 \section{Produktprincip}
 \input{kapitler/produktprincip.tex}
@@ -80,7 +81,7 @@
 \end{minipage}
 \newpage
 
-\section{Problemanalyse}
+\section{Problemanalyse}\label{sec:problemanalyse}
 \input{kapitler/problemanalyse.tex}
 \newpage
 
@@ -100,7 +101,7 @@
 \input{kapitler/metode_redskab.tex}
 \newpage
 
-\section{Produktudvikling}
+\section{Produktudvikling}\label{sec:produktudvikling}
 \input{kapitler/produktudvikling.tex}
 \newpage
 
@@ -108,17 +109,16 @@
 \input{kapitler/produktevaluering.tex}
 \newpage
 
-\todo[inline]{Kapitel: Løsningsforslag}
+\section{Løsningsforslag}
+\input{kapitler/løsningsforslag.tex}
 \newpage
 
 \section{Markedsføring og udgivelse}
 \input{kapitler/markedsføring.tex}
 \newpage
 
-\todo[inline]{Kapitel: Konklusion}
-\newpage
-
-\todo[inline]{Kapitel: Perspektivering}
+\section{Konklusion og perspektivering}
+\input{kapitler/konklusion.tex}
 \newpage
 
 
@@ -128,38 +128,31 @@
 \section{Bilag}
 \appendix
 
-\subsection{Appendiks A ``brainstorm''}
-\renewcommand{\thepage}{A\arabic{page}}
-\pagenumbering{arabic}
-\input{appendices/brainstorm/appendiks.tex}
-\newpage
-
-\null\vfill
-\subsection{Appendiks B ``afleverede projektbeskrivelse''}
+\subsection{Appendiks A ``afleverede projektbeskrivelse''}
 \renewcommand{\thepage}{B\arabic{page}}
 \pagenumbering{arabic}
 \input{appendices/projektbeskrivelse/appendiks.tex}
 \newpage
 
 \null\vfill
-\subsection{Appendiks C ``opløsningovervejelser''}
-\renewcommand{\thepage}{C\arabic{page}}
+\subsection{Appendiks B ``opløsningovervejelser''}
+\renewcommand{\thepage}{B\arabic{page}}
 \pagenumbering{arabic}
 \input{appendices/skaleringtegninger/appendiks.tex}
 \newpage
 
 \null\vfill
-\subsection{Appendiks D ``stand-up-referater''}
-\renewcommand{\thepage}{D\arabic{page}}
+\subsection{Appendiks C ``stand-up-referater''}
+\renewcommand{\thepage}{C\arabic{page}}
 \pagenumbering{arabic}
 \input{appendices/standups/appendiks.tex}
 \newpage
 
 \null\vfill
-\subsection{Appendiks E ``Sprites''}
+\subsection{Appendiks D ``Sprites''}
 \label{apx:sprites}
 Spritesne er alle markant opskaleret og kan derfor fremgå lidt ``sjove'' på billederne.
-\renewcommand{\thepage}{E\arabic{page}}
+\renewcommand{\thepage}{D\arabic{page}}
 \pagenumbering{arabic}
 \includepdf[pages=-, landscape=true, nup=1x1, frame=true, scale=0.9, pagecommand={}]{appendices/sprites/sprites.pdf}
 \includepdf[pages=-, landscape=true, nup=1x1, frame=true, scale=0.9, pagecommand={}]{appendices/sprites/motor.pdf}
@@ -169,9 +162,9 @@ Spritesne er alle markant opskaleret og kan derfor fremgå lidt ``sjove'' på bi
 \newpage
 
 \null\vfill
-\subsection{Appendiks F ``Moodboard''}
+\subsection{Appendiks E ``Moodboard''}
 \label{apx:moodboard}
-\renewcommand{\thepage}{F\arabic{page}}
+\renewcommand{\thepage}{E\arabic{page}}
 \pagenumbering{arabic}
 \input{appendices/moodboard/appendiks.tex}
 \newpage

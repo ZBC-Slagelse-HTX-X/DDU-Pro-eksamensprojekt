@@ -34,11 +34,6 @@ Vi har løbende måtte fortage ændringer i den plan for at tage hånd om dele s
 
 Planen er opstillet i en prioriteret rækkefølge med de vigtigste grundelementer, som danner grundlaget for et spilbart spil.
 
-\todo[inline]{Angiv standup-referater og link til SCRUM}
-
-\todo[inline]{Nævn Git}
-
-\todo[inline]{Visualiser forgrening af GitHub-projekt}
 
 \subsection{\LaTeX\ ToDo-notes}
 Selve rapporten her er skrevet i \LaTeX-kode, læs om \LaTeX i \autoref{sec:latexsoftware}, og sidenhen kompileret via \mintinline{bash}{pdflatex}. En særlig \LaTeX-package, er \mintinline{bash}{todonotes}, der gør det muligt at oprette to-do-noter, der så inkluderes i den kompilerede pdf. Det har muliggjort planlægning af strukturen i rapporten direkte i rapporten, og således har vi ikke behøvet et separat system til at holde styr på rapportens indhold. Det betyder også, at man bliver konfronteret med noterne undervejs, og man bliver således nødt til at forholde sig til dem. To-do-noterne er også blevet brugt som et rudimentært skelet, og som færdighedsmarkør---hvor at en ToDo-note viser, at et kapitel ikke er færdigskrevet. Af \autoref{fig:todonote} fremgår, hvordan disse todonotes ser ud, når \LaTeX-dokumentet er kompileret.
@@ -46,5 +41,5 @@ Selve rapporten her er skrevet i \LaTeX-kode, læs om \LaTeX i \autoref{sec:late
 \begin{figure}[H]
   \centering
   \fbox{\includegraphics[width=0.85\textwidth]{assets/todoeksempel.png}}
-  \caption{Viser en to-do-note fra packagen \mintinline{bash}{todonotes}. Her oprettet via \mintinline{latex}{\todo[inline]{...}} osv. Bemærk, at den er oprettet med \mintinline{latex}{inline}, da to-do-noten ellers placeres i dokumentets margen, hvilket kan se mærkeligt ud, især når indholdet i todo-noten er tilpas stor.}\label{fig:todonote}
+  \caption{Viser en to-do-note fra packagen \texttt{todonotes}. To-do-noten er en inline todo-note, da den ellers placeres i dokumentets margen, hvilket kan se mærkeligt ud, især når indholdet i todo-noten er tilpas stor.}\label{fig:todonote}
 \end{figure}

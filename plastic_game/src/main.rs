@@ -25,6 +25,7 @@ fn main() {
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_plugins(items::items)
         .init_resource::<movement::InputMode>()
+        .init_resource::<movement::HandMode>()
         .init_state::<GameState>()
         .add_systems(Startup, pixel_grid_copy::setup_camera)
         .add_plugins(splash_screen::splash_plugin)
@@ -34,7 +35,7 @@ fn main() {
         .add_plugins(movement::wrap_non_wrap)
         .add_plugins(aim::aim_plugin)
         .add_plugins(enemies::trash_handler)
-        .add_systems(Update, (pixel_grid_copy::fit_canvas, movement::change_inputmode))
+        .add_systems(Update, (pixel_grid_copy::fit_canvas, movement::change_inputmode, movement::handle_hand_mode_trigger))
         .run();
 }
 
